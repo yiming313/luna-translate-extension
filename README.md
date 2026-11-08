@@ -37,7 +37,7 @@ Custom prompts replace the defaults in the options page. In a custom translate p
 | OpenRouter | `openrouter.ai/api/v1/chat/completions` | `anthropic/claude-haiku-5.5` |
 | OpenAI | `api.openai.com/v1/chat/completions` | `gpt-6-luna` |
 | Anthropic | `api.anthropic.com/v1/messages` | `claude-haiku-5-5` |
-| Gemini | `generativelanguage.googleapis.com/v1beta` | `gemini-3.8-flash` |
+| Gemini | `generativelanguage.googleapis.com/v1beta` | `gemini-3.5-flash` |
 
 Pick a model from the dropdown, or choose “Custom…” to type any model ID. The built-in list is only a starting point: click **Refresh list** in the options page to load the live, newest-first model list from the provider (OpenRouter needs no key; the others use your key). An optional custom base URL supports proxies and OpenAI-compatible servers (the browser asks for access to that host when you save).
 
