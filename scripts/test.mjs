@@ -39,11 +39,16 @@ globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: '
 await assert.rejects(callAI({ provider: 'openai', apiKey: 'k' }, 's', 'u'), /401: bad key/);
 await assert.rejects(callAI({ provider: 'openai', apiKey: '' }, 's', 'u'), /No API key/);
 
-// Prompts: defaults are the website's Translate prompt, untouched unless a language is chosen
-const site = buildRequest('translate', 'x', { targetLanguage: 'auto' }).system;
-assert.match(site, /^You are an excellent English teacher\./);
-assert.match(site, /Casual Tone/);
-assert.equal(buildRequest('polish', 'x', {}).system, site);
-assert.match(buildRequest('translate', 'x', { targetLanguage: '日本語' }).system, /日本語\.$/);
-assert.ok(buildRequest('translate', 'x', { targetLanguage: 'auto', translatePrompt: 'custom' }).system.startsWith('custom'));
+// Prompts: language-agnostic defaults, language rules appended from settings
+const auto = buildRequest('translate', 'x', { targetLanguage: 'auto', primaryLanguage: '日本語' }).system;
+assert.match(auto, /Target language: 日本語\. If the text is already in 日本語, translate it into English/);
+assert.match(auto, /fluent in every language/);
+assert.doesNotMatch(auto, /English teacher/);
+assert.match(buildRequest('translate', 'x', { targetLanguage: 'Français' }).system, /Target language: Français\.$/);
+assert.match(buildRequest('translate', 'x', {}).system, /Target language: 简体中文/);
+const pol = buildRequest('polish', 'x', {}).system;
+assert.match(pol, /same language as the original/);
+assert.doesNotMatch(pol, /Target language/);
+assert.match(buildRequest('polish', 'x', { polishLanguage: 'Deutsch' }).system, /in Deutsch\.$/);
+assert.ok(buildRequest('translate', 'x', { translatePrompt: 'custom' }).system.startsWith('custom'));
 console.log('all checks passed');

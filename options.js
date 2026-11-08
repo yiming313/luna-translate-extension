@@ -1,5 +1,5 @@
 import { PROVIDERS, callAI } from './lib/providers.js';
-import { TARGET_LANGUAGES } from './lib/prompts.js';
+import { LANGUAGES } from './lib/prompts.js';
 import { loadSettings, saveSettings } from './lib/storage.js';
 
 const $ = (id) => document.getElementById(id);
@@ -63,6 +63,7 @@ async function ensureHostPermission(baseUrl) {
 async function save() {
   stashCurrent();
   settings.provider = provider;
+  settings.primaryLanguage = $('primaryLanguage').value;
   settings.targetLanguage = $('targetLanguage').value;
   settings.polishLanguage = $('polishLanguage').value;
   settings.translatePrompt = $('translatePrompt').value;
@@ -101,9 +102,12 @@ async function test() {
     button.addEventListener('click', () => { stashCurrent(); showProvider(id); });
     box.append(button);
   }
-  for (const [value, label] of TARGET_LANGUAGES) $('targetLanguage').append(new Option(label, value));
+  for (const [value, label] of LANGUAGES) $('primaryLanguage').append(new Option(label, value));
+  $('targetLanguage').append(new Option('自动（主要语言 ↔ 英文）', 'auto'));
+  for (const [value, label] of LANGUAGES) $('targetLanguage').append(new Option(label, value));
   $('polishLanguage').append(new Option('与原文相同', 'same'));
-  for (const [value, label] of TARGET_LANGUAGES.slice(1)) $('polishLanguage').append(new Option(label, value));
+  for (const [value, label] of LANGUAGES) $('polishLanguage').append(new Option(label, value));
+  $('primaryLanguage').value = settings.primaryLanguage;
   $('targetLanguage').value = settings.targetLanguage;
   $('polishLanguage').value = settings.polishLanguage;
   $('translatePrompt').value = settings.translatePrompt;
