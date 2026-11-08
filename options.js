@@ -1,12 +1,32 @@
-import { PROVIDERS, callAI } from './lib/providers.js';
+import { PROVIDERS, callAI, listModels } from './lib/providers.js';
 import { LANGUAGES } from './lib/prompts.js';
-import { loadSettings, saveSettings } from './lib/storage.js';
+import { loadSettings, saveSettings, loadModelCache, saveModelCache } from './lib/storage.js';
 import { t, applyI18n } from './lib/i18n.js';
 
 const $ = (id) => document.getElementById(id);
 const statusEl = $('status');
 let settings;
 let provider;
+let modelCache = {};
+const CUSTOM = '__custom__';
+
+/** The model chosen in the form: '' means "use the provider default". */
+function chosenModel() {
+  return $('modelSelect').value === CUSTOM ? $('model').value.trim() : $('modelSelect').value;
+}
+
+function fillModels(selected) {
+  const spec = PROVIDERS[provider];
+  const ids = modelCache[provider]?.ids?.length ? modelCache[provider].ids : spec.models;
+  const select = $('modelSelect');
+  select.replaceChildren(new Option(t('optModelDefault', spec.defaultModel), ''));
+  for (const id of ids) select.append(new Option(id, id));
+  select.append(new Option(t('optModelCustom'), CUSTOM));
+  const known = selected === '' || ids.includes(selected);
+  select.value = known ? selected : CUSTOM;
+  $('model').value = known ? '' : selected;
+  $('model').classList.toggle('hidden', known);
+}
 
 function say(text, isError = false) {
   statusEl.textContent = text;
@@ -16,7 +36,7 @@ function say(text, isError = false) {
 function stashCurrent() {
   // Copy the form fields for the visible provider into the in-memory settings.
   settings.apiKeys = { ...settings.apiKeys, [provider]: $('apiKey').value.trim() };
-  settings.models = { ...settings.models, [provider]: $('model').value.trim() };
+  settings.models = { ...settings.models, [provider]: chosenModel() };
   settings.baseUrls = { ...settings.baseUrls, [provider]: $('baseUrl').value.trim() };
 }
 
@@ -30,11 +50,9 @@ function showProvider(next) {
   });
   $('apiKey').value = settings.apiKeys?.[provider] || '';
   $('apiKey').placeholder = spec.keyHint;
-  $('model').value = settings.models?.[provider] || '';
-  $('model').placeholder = spec.defaultModel;
+  fillModels(settings.models?.[provider] || '');
   $('baseUrl').value = settings.baseUrls?.[provider] || '';
   $('keyLink').href = spec.keyUrl;
-  $('modelList').replaceChildren(...spec.models.map((name) => new Option(name, name)));
   say('');
 }
 
@@ -42,7 +60,7 @@ function currentConfig() {
   return {
     provider,
     apiKey: $('apiKey').value.trim(),
-    model: $('model').value.trim(),
+    model: chosenModel(),
     baseUrl: $('baseUrl').value.trim(),
   };
 }
@@ -59,6 +77,22 @@ async function ensureHostPermission(baseUrl) {
   }
   if (await chrome.permissions.contains({ origins: [origin] })) return true;
   return chrome.permissions.request({ origins: [origin] });
+}
+
+async function refreshModels() {
+  const config = currentConfig();
+  if (provider !== 'openrouter' && !config.apiKey) { say(t('optModelsNeedKey'), true); return; }
+  say(t('optTesting'));
+  try {
+    if (!(await ensureHostPermission(config.baseUrl))) throw new Error(t('optPermDenied'));
+    const ids = await listModels(config);
+    modelCache = { ...modelCache, [provider]: { ids, at: Date.now() } };
+    await saveModelCache(modelCache);
+    fillModels(chosenModel());
+    say(t('optModelsLoaded', ids.length));
+  } catch (error) {
+    say(t('optModelsFailed', error.message), true);
+  }
 }
 
 async function save() {
@@ -94,6 +128,7 @@ async function test() {
 (async function init() {
   applyI18n();
   settings = await loadSettings();
+  modelCache = await loadModelCache();
   const box = $('providers');
   for (const [id, spec] of Object.entries(PROVIDERS)) {
     const button = document.createElement('button');
@@ -126,4 +161,10 @@ async function test() {
     $(id).addEventListener('change', () => save());
   }
   $('test').addEventListener('click', test);
+  $('refreshModels').addEventListener('click', refreshModels);
+  $('modelSelect').addEventListener('change', () => {
+    $('model').classList.toggle('hidden', $('modelSelect').value !== CUSTOM);
+    if ($('modelSelect').value === CUSTOM) $('model').focus(); else save();
+  });
+  $('model').addEventListener('change', save);
 })();

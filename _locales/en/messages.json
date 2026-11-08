@@ -205,5 +205,41 @@
         "content": "$1"
       }
     }
+  },
+  "optRefreshModels": {
+    "message": "Refresh list"
+  },
+  "optModelDefault": {
+    "message": "Default ($MODEL$)",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelCustom": {
+    "message": "Custom…"
+  },
+  "optModelsLoaded": {
+    "message": "Loaded $N$ models.",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelsFailed": {
+    "message": "Couldn't load models: $ERROR$",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelsNeedKey": {
+    "message": "Enter an API key first."
+  },
+  "optModelCustomPlaceholder": {
+    "message": "Model ID"
   }
 }

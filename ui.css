@@ -50,3 +50,5 @@ a { color: var(--accent); }
 .options ul { margin: 0; padding-left: 18px; }
 
 .kbd { margin-left: 4px; padding: 0 5px; border: 1px solid currentColor; border-radius: 4px; font: inherit; font-size: 11px; opacity: .7; }
+.model-row { display: flex; gap: 8px; }
+.model-row select { flex: 1; min-width: 0; }

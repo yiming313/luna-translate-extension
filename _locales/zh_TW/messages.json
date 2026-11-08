@@ -205,5 +205,41 @@
         "content": "$1"
       }
     }
+  },
+  "optRefreshModels": {
+    "message": "重新整理清單"
+  },
+  "optModelDefault": {
+    "message": "預設（$MODEL$）",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelCustom": {
+    "message": "自訂…"
+  },
+  "optModelsLoaded": {
+    "message": "已載入 $N$ 個模型。",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelsFailed": {
+    "message": "無法載入模型清單：$ERROR$",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelsNeedKey": {
+    "message": "請先填寫 API Key。"
+  },
+  "optModelCustomPlaceholder": {
+    "message": "模型 ID"
   }
 }

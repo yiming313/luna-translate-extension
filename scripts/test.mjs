@@ -1,6 +1,6 @@
 // Offline checks: mocks fetch and verifies each provider's request shape and reply parsing.
 import assert from 'node:assert/strict';
-import { callAI, PROVIDERS } from '../lib/providers.js';
+import { callAI, listModels, PROVIDERS } from '../lib/providers.js';
 import { buildRequest } from '../lib/prompts.js';
 
 const calls = [];
@@ -33,6 +33,20 @@ for (const provider of Object.keys(PROVIDERS)) {
     assert.equal(body.messages[0].role, 'system');
   }
 }
+
+// Live model lists
+const fakeList = (payload) => { globalThis.fetch = async () => new Response(JSON.stringify(payload), { status: 200 }); };
+fakeList({ data: [{ id: 'a/old', created: 1, architecture: { output_modalities: ['text'] } }, { id: 'a/new', created: 9, architecture: { output_modalities: ['text'] } }, { id: 'a/new:batch', created: 9 }, { id: 'a/img', created: 5, architecture: { output_modalities: ['text', 'image'] } }] });
+assert.deepEqual(await listModels({ provider: 'openrouter' }), ['a/new', 'a/old']);
+fakeList({ data: [{ id: 'zzz/newest', created: 99 }, { id: 'openai/x', created: 1 }, { id: 'google/y', created: 2 }] });
+assert.deepEqual(await listModels({ provider: 'openrouter' }), ['google/y', 'openai/x', 'zzz/newest']);
+fakeList({ data: [{ id: 'gpt-old', created: 1 }, { id: 'gpt-6-luna', created: 9 }, { id: 'text-embedding-x', created: 10 }, { id: 'whisper-1', created: 11 }, { id: 'gpt-image-2', created: 12 }] });
+assert.deepEqual(await listModels({ provider: 'openai', apiKey: 'k' }), ['gpt-6-luna', 'gpt-old']);
+fakeList({ data: [{ id: 'claude-a', created_at: '2026-01-01T00:00:00Z' }, { id: 'claude-b', created_at: '2026-06-01T00:00:00Z' }] });
+assert.deepEqual(await listModels({ provider: 'anthropic', apiKey: 'k' }), ['claude-b', 'claude-a']);
+fakeList({ models: [{ name: 'models/gemini-3.7-flash', supportedGenerationMethods: ['generateContent'] }, { name: 'models/gemini-3.10-flash', supportedGenerationMethods: ['generateContent'] }, { name: 'models/gemini-embedding-1', supportedGenerationMethods: ['embedContent'] }, { name: 'models/imagen-4', supportedGenerationMethods: ['predict'] }] });
+assert.deepEqual(await listModels({ provider: 'gemini', apiKey: 'k' }), ['gemini-3.10-flash', 'gemini-3.7-flash']);
+await assert.rejects(listModels({ provider: 'openai', apiKey: '' }), /No API key/);
 
 // Error handling
 globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: 'bad key' } }), { status: 401 });

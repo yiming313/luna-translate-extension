@@ -205,5 +205,41 @@
         "content": "$1"
       }
     }
+  },
+  "optRefreshModels": {
+    "message": "刷新列表"
+  },
+  "optModelDefault": {
+    "message": "默认（$MODEL$）",
+    "placeholders": {
+      "model": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelCustom": {
+    "message": "自定义…"
+  },
+  "optModelsLoaded": {
+    "message": "已加载 $N$ 个模型。",
+    "placeholders": {
+      "n": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelsFailed": {
+    "message": "无法加载模型列表：$ERROR$",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  },
+  "optModelsNeedKey": {
+    "message": "请先填写 API Key。"
+  },
+  "optModelCustomPlaceholder": {
+    "message": "模型 ID"
   }
 }

@@ -34,11 +34,11 @@ Both prompts can be replaced in the options page.
 | Provider | Endpoint | Default model |
 | --- | --- | --- |
 | OpenRouter | `openrouter.ai/api/v1/chat/completions` | `anthropic/claude-haiku-5.5` |
-| OpenAI | `api.openai.com/v1/chat/completions` | `gpt-5-mini` |
+| OpenAI | `api.openai.com/v1/chat/completions` | `gpt-6-luna` |
 | Anthropic | `api.anthropic.com/v1/messages` | `claude-haiku-5-5` |
-| Gemini | `generativelanguage.googleapis.com/v1beta` | `gemini-2.5-flash` |
+| Gemini | `generativelanguage.googleapis.com/v1beta` | `gemini-3.8-flash` |
 
-The model field is free text; change it to any model your account can use. An optional custom base URL supports proxies and OpenAI-compatible servers (the browser asks for access to that host when you save).
+Pick a model from the dropdown, or choose “Custom…” to type any model ID. The built-in list is only a starting point: click **Refresh list** in the options page to load the live, newest-first model list from the provider (OpenRouter needs no key; the others use your key). An optional custom base URL supports proxies and OpenAI-compatible servers (the browser asks for access to that host when you save).
 
 ## Privacy
 

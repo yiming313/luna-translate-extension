@@ -19,11 +19,14 @@
         <span><span data-i18n="optApiKey"></span> <a id="keyLink" href="#" target="_blank" rel="noopener noreferrer" data-i18n="optGetKey"></a></span>
         <input id="apiKey" type="password" autocomplete="off" spellcheck="false" />
       </label>
-      <label class="field">
+      <div class="field">
         <span data-i18n="optModel"></span>
-        <input id="model" list="modelList" autocomplete="off" spellcheck="false" />
-        <datalist id="modelList"></datalist>
-      </label>
+        <div class="model-row">
+          <select id="modelSelect" data-i18n-label="optModel"></select>
+          <button type="button" id="refreshModels" data-i18n="optRefreshModels"></button>
+        </div>
+        <input id="model" class="hidden" autocomplete="off" spellcheck="false" data-i18n-placeholder="optModelCustomPlaceholder" />
+      </div>
       <label class="field">
         <span data-i18n="optBaseUrl"></span>
         <input id="baseUrl" type="url" autocomplete="off" spellcheck="false" data-i18n-placeholder="optBaseUrlPlaceholder" />
