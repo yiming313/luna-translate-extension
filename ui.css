@@ -22,7 +22,8 @@ a { color: var(--accent); }
 .bar { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 .bar strong { flex: 1; }
 .provider-pill { padding: 1px 8px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; font-size: 11px; }
-.icon-btn { padding: 2px 8px; }
+.icon-btn { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; color: var(--muted); background: transparent; border-color: transparent; }
+.icon-btn:hover:not(:disabled) { color: var(--accent); border-color: var(--line); }
 .tabs { display: flex; gap: 4px; margin-bottom: 8px; }
 .tab { flex: 1; }
 .tab.is-active { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }

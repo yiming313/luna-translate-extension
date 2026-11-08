@@ -77,7 +77,7 @@
     "message": "Input text"
   },
   "popupNoKey": {
-    "message": "No API key yet. Click ⚙ at the top right to add an OpenRouter, OpenAI, Anthropic or Gemini key."
+    "message": "No API key yet. Click the settings icon at the top right to add an OpenRouter, OpenAI, Anthropic or Gemini key."
   },
   "optPageTitle": {
     "message": "Luna Translate Settings"

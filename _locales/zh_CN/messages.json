@@ -77,7 +77,7 @@
     "message": "输入文本"
   },
   "popupNoKey": {
-    "message": "还没有设置 API Key。点击右上角 ⚙ 添加 OpenRouter / OpenAI / Anthropic / Gemini 的 Key。"
+    "message": "还没有设置 API Key。点击右上角的设置图标，添加 OpenRouter / OpenAI / Anthropic / Gemini 的 Key。"
   },
   "optPageTitle": {
     "message": "Luna Translate 设置"
