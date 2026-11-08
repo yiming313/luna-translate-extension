@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0a0d18" />
+  <title>Luna Translate — Privacy Policy</title>
+  <meta name="description" content="Privacy policy for the Luna Translate Chrome extension." />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <style>
+    :root { --bg: #0a0d18; --panel: #12172a; --line: #232a47; --line-2: #2f3860; --ink: #eef1fb; --muted: #98a2c3; --faint: #646e92; --accent: #5acced; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--bg); font: 16px/1.75 "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; -webkit-font-smoothing: antialiased; }
+    body::before { content: ""; position: fixed; inset: 0 0 auto 0; height: 520px; pointer-events: none; z-index: 0; background: radial-gradient(600px 420px at 85% -10%, rgba(90, 204, 237, .16), transparent 65%); }
+    a { color: var(--accent); }
+    ::selection { color: #06141a; background: var(--accent); }
+    html[data-lang="zh"] [lang="en"], html[data-lang="en"] [lang="zh"] { display: none !important; }
+    .wrap { position: relative; z-index: 1; width: min(760px, calc(100% - 40px)); margin: 0 auto; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+    .brand { display: flex; align-items: center; gap: 11px; color: var(--ink); font-weight: 650; text-decoration: none; }
+    .brand svg { width: 30px; height: 30px; }
+    .lang { display: inline-flex; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: rgba(18, 23, 42, .6); }
+    .lang button { padding: 3px 11px; color: var(--muted); background: none; border: 0; border-radius: 999px; font: inherit; font-size: 12px; cursor: pointer; }
+    html[data-lang="zh"] .lang [data-set="zh"], html[data-lang="en"] .lang [data-set="en"] { color: #06141a; background: var(--accent); font-weight: 650; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    h1 { margin: 44px 0 8px; font-size: clamp(32px, 5vw, 44px); line-height: 1.12; letter-spacing: -.03em; }
+    .updated { margin: 0 0 36px; color: var(--faint); font-size: 14px; }
+    .summary { margin: 0 0 40px; padding: 20px 22px; border: 1px solid var(--line-2); border-radius: 16px; background: linear-gradient(180deg, var(--panel), #0e1222); color: #cdd4ee; }
+    .summary b { color: var(--accent); }
+    h2 { margin: 40px 0 10px; font-size: 21px; letter-spacing: -.015em; }
+    p, li { color: var(--muted); }
+    ul { padding-left: 22px; } li { margin: 6px 0; }
+    li strong, p strong { color: var(--ink); font-weight: 600; }
+    code { padding: 1px 7px; border-radius: 6px; background: rgba(255,255,255,.07); font: .88em ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: #d9def2; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+    th, td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: var(--ink); font-weight: 600; }
+    td { color: var(--muted); }
+    footer { padding: 56px 0 64px; color: var(--faint); font-size: 13px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; }
+    @media (max-width: 560px) { table, tbody, tr, th, td { display: block; } thead { display: none; } tr { padding: 8px 0; border-bottom: 1px solid var(--line); } td { border: 0; padding: 2px 0; } td:first-child { color: var(--ink); font-weight: 600; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="./">
+        <svg viewBox="0 0 128 128" aria-hidden="true"><rect x="8" y="8" width="112" height="112" rx="30" fill="#252839"/><path d="M41 35v53h43" fill="none" stroke="#5ACCED" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 29c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21-15 0-21-6-21-21Z" fill="#5ACCED"/></svg>
+        Luna Translate
+      </a>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-set="zh">中文</button><button type="button" data-set="en">EN</button></div>
+    </header>
+
+    <main>
+      <h1><span lang="en">Privacy Policy</span><span lang="zh">隐私政策</span></h1>
+      <p class="updated"><span lang="en">Last updated: November 7, 2026</span><span lang="zh">最后更新：2026 年 11 月 7 日</span></p>
+
+      <div class="summary">
+        <span lang="en"><b>In short:</b> Luna Translate has no server and collects nothing. Your API key and settings stay in your browser. The text you enter is sent only to the AI provider you chose, using your own API key.</span>
+        <span lang="zh"><b>简而言之：</b>Luna Translate 没有服务器，不收集任何数据。你的 API Key 和设置只保存在你的浏览器里。你输入的文字只会通过你自己的 API Key 发送给你选择的 AI 服务商。</span>
+      </div>
+
+      <h2><span lang="en">What the extension is</span><span lang="zh">这个扩展是什么</span></h2>
+      <p><span lang="en">Luna Translate is a Chrome extension that translates and polishes text you type or paste into its toolbar popup, using an AI service you configure yourself (OpenRouter, OpenAI, Anthropic or Google Gemini). The developer does not operate any server, account system or analytics for it.</span><span lang="zh">Luna Translate 是一个 Chrome 扩展，用你自己配置的 AI 服务（OpenRouter、OpenAI、Anthropic 或 Google Gemini），翻译和润色你在工具栏弹窗里输入或粘贴的文字。开发者不运营任何服务器、账号系统或统计服务。</span></p>
+
+      <h2><span lang="en">Data stored on your device</span><span lang="zh">保存在你设备上的数据</span></h2>
+      <p><span lang="en">The extension stores the following in <code>chrome.storage.local</code>, inside your own browser profile:</span><span lang="zh">扩展把下列内容保存在你自己浏览器配置文件里的 <code>chrome.storage.local</code> 中：</span></p>
+      <ul>
+        <li><span lang="en">The API key(s) you enter, the selected provider and model, any custom endpoint address, and a cached list of model names.</span><span lang="zh">你填写的 API Key、所选服务商和模型、自定义接口地址，以及缓存的模型名称列表。</span></li>
+        <li><span lang="en">Your language preferences and any custom prompts you write.</span><span lang="zh">你的语言偏好，以及你自己编写的提示词。</span></li>
+      </ul>
+      <p><span lang="en">This data is <strong>not synced</strong> to your Google account, <strong>not uploaded</strong> to the developer, and not shared with anyone. It is not encrypted by the extension beyond what your browser profile provides. You can erase everything at any time with “Delete all saved data” on the settings page, or by uninstalling the extension.</span><span lang="zh">这些数据<strong>不会同步</strong>到你的 Google 账号，<strong>不会上传</strong>给开发者，也不会与任何人共享。除浏览器配置文件本身提供的保护外，扩展不会再对其加密。你可以随时在设置页点“删除所有已保存的数据”，或卸载扩展，清除全部内容。</span></p>
+
+      <h2><span lang="en">Data sent to the AI provider you choose</span><span lang="zh">发送给你所选 AI 服务商的数据</span></h2>
+      <p><span lang="en">When you press Translate or Polish, the extension sends the text you entered, together with the instruction prompt, directly from your browser to the endpoint of the provider you selected, authenticated with your own API key. When you press “Refresh list” or “Test connection”, it sends a model-list or a tiny test request to the same provider.</span><span lang="zh">当你点击“翻译”或“润色”时，扩展会把你输入的文字连同指令提示词，直接从你的浏览器发送到你所选服务商的接口，并使用你自己的 API Key 认证。点击“刷新列表”或“测试连接”时，会向同一服务商发送获取模型列表或一个很小的测试请求。</span></p>
+      <table>
+        <thead><tr><th><span lang="en">Provider</span><span lang="zh">服务商</span></th><th><span lang="en">Endpoint contacted</span><span lang="zh">访问的接口</span></th><th><span lang="en">Their privacy policy</span><span lang="zh">其隐私政策</span></th></tr></thead>
+        <tbody>
+          <tr><td>OpenRouter</td><td><code>openrouter.ai</code></td><td><a href="https://openrouter.ai/privacy" rel="noopener noreferrer">openrouter.ai/privacy</a></td></tr>
+          <tr><td>OpenAI</td><td><code>api.openai.com</code></td><td><a href="https://openai.com/policies/privacy-policy" rel="noopener noreferrer">openai.com/policies</a></td></tr>
+          <tr><td>Anthropic</td><td><code>api.anthropic.com</code></td><td><a href="https://www.anthropic.com/privacy" rel="noopener noreferrer">anthropic.com/privacy</a></td></tr>
+          <tr><td>Google Gemini</td><td><code>generativelanguage.googleapis.com</code></td><td><a href="https://policies.google.com/privacy" rel="noopener noreferrer">policies.google.com/privacy</a></td></tr>
+        </tbody>
+      </table>
+      <p><span lang="en">Once the text reaches a provider, that provider’s own terms and privacy policy apply to it. The developer cannot see or control it. If you enter a custom endpoint (for example a proxy or a local server), your text and API key are sent to that address instead, and you are responsible for trusting it. Please do not enter highly sensitive information if you are not comfortable sharing it with your chosen provider.</span><span lang="zh">文字到达服务商之后，适用该服务商自己的条款和隐私政策，开发者既看不到也无法控制。如果你填写了自定义接口地址（例如代理或本地服务），你的文字和 API Key 会改为发送到该地址，是否信任它由你自己决定。如果你不愿意与所选服务商共享，请不要输入高度敏感的信息。</span></p>
+
+      <h2><span lang="en">What the extension does not do</span><span lang="zh">这个扩展不会做的事</span></h2>
+      <ul>
+        <li><span lang="en">It does not read, collect or modify the web pages you visit, and has no content scripts. It does not access your browsing history, tabs, cookies or clipboard.</span><span lang="zh">不读取、不收集、不修改你访问的网页，没有任何网页脚本；不访问你的浏览历史、标签页、Cookie 或剪贴板。</span></li>
+        <li><span lang="en">It contains no analytics, advertising, tracking or telemetry, and sets no cookies.</span><span lang="zh">不包含统计、广告、追踪或遥测，也不设置 Cookie。</span></li>
+        <li><span lang="en">It does not sell or transfer user data to third parties, does not use it for purposes unrelated to translating and polishing your text, and does not use it to determine creditworthiness or for lending.</span><span lang="zh">不出售或转让用户数据给第三方，不把数据用于与翻译、润色文字无关的目的，也不用于信用评估或放贷。</span></li>
+        <li><span lang="en">It does not download or run remote code. All code ships inside the extension package.</span><span lang="zh">不下载也不运行远程代码，所有代码都在扩展包内。</span></li>
+      </ul>
+
+      <h2><span lang="en">Permissions</span><span lang="zh">权限说明</span></h2>
+      <ul>
+        <li><strong>storage</strong> — <span lang="en">to keep your settings and API key on your device.</span><span lang="zh">在你的设备上保存设置和 API Key。</span></li>
+        <li><strong><span lang="en">Four provider hosts</span><span lang="zh">四个服务商的接口</span></strong> — <span lang="en">to send your requests to the AI service you chose.</span><span lang="zh">把你的请求发送给你选择的 AI 服务。</span></li>
+        <li><strong><span lang="en">Optional host access</span><span lang="zh">可选的主机访问</span></strong> — <span lang="en">never granted by default; the browser asks you only if you enter a custom endpoint, and only for that one host.</span><span lang="zh">默认不授予；只有当你填写自定义接口地址时，浏览器才会询问，并且只针对那一个地址。</span></li>
+      </ul>
+
+      <h2><span lang="en">Children</span><span lang="zh">儿童</span></h2>
+      <p><span lang="en">The extension is a general-purpose tool and is not directed at children under 13. It collects no personal information from anyone.</span><span lang="zh">这个扩展是通用工具，不面向 13 岁以下儿童，也不会从任何人那里收集个人信息。</span></p>
+
+      <h2><span lang="en">Changes to this policy</span><span lang="zh">政策的变更</span></h2>
+      <p><span lang="en">If the extension’s data handling ever changes, this page will be updated and the date above will change before the new version is released.</span><span lang="zh">如果扩展处理数据的方式发生变化，会在新版本发布前更新本页面和上面的日期。</span></p>
+
+      <h2><span lang="en">Contact</span><span lang="zh">联系方式</span></h2>
+      <p><span lang="en">Questions about this policy can be raised by opening an issue at <a href="https://github.com/yiming313/luna-translate-extension/issues" rel="noopener noreferrer">github.com/yiming313/luna-translate-extension/issues</a>.</span><span lang="zh">对本政策有任何疑问，可以到 <a href="https://github.com/yiming313/luna-translate-extension/issues" rel="noopener noreferrer">github.com/yiming313/luna-translate-extension/issues</a> 提交 Issue。</span></p>
+    </main>
+
+    <footer>
+      <a href="./"><span lang="en">← Back to Luna Translate</span><span lang="zh">← 返回 Luna Translate</span></a>
+      <span>© Luna Translate</span>
+    </footer>
+  </div>
+  <script>
+    (function () {
+      var root = document.documentElement, saved = null;
+      try { saved = localStorage.getItem('luna-lang'); } catch (e) {}
+      function apply(l) {
+        root.setAttribute('data-lang', l); root.lang = l === 'zh' ? 'zh-CN' : 'en';
+        document.title = l === 'zh' ? 'Luna Translate — 隐私政策' : 'Luna Translate — Privacy Policy';
+        try { localStorage.setItem('luna-lang', l); } catch (e) {}
+      }
+      apply(saved || (/^zh/i.test(navigator.language || '') ? 'zh' : 'en'));
+      document.querySelectorAll('.lang button').forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.set); }); });
+    })();
+  </script>
+</body>
+</html>
