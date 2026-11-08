@@ -241,5 +241,17 @@
   },
   "optModelCustomPlaceholder": {
     "message": "模型 ID"
+  },
+  "optPrivacy": {
+    "message": "隱私與資料"
+  },
+  "optPrivacyText": {
+    "message": "API Key 與設定只儲存在本瀏覽器設定檔中（chrome.storage.local，未加密），不會同步，也不會傳送到你所選 AI 服務商以外的任何地方。你翻譯或潤飾的文字只會傳給該服務商。沒有 Luna 伺服器，也沒有統計。"
+  },
+  "optClear": {
+    "message": "刪除所有已儲存的資料"
+  },
+  "optClearConfirm": {
+    "message": "刪除此擴充功能儲存的所有 API Key 與設定？此操作無法復原。"
   }
 }

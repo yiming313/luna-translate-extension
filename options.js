@@ -1,4 +1,4 @@
-import { PROVIDERS, callAI, listModels } from './lib/providers.js';
+import { PROVIDERS, callAI, listModels, assertSafeBaseUrl } from './lib/providers.js';
 import { LANGUAGES } from './lib/prompts.js';
 import { loadSettings, saveSettings, loadModelCache, saveModelCache } from './lib/storage.js';
 import { t, applyI18n } from './lib/i18n.js';
@@ -69,11 +69,9 @@ async function ensureHostPermission(baseUrl) {
   if (!baseUrl) return true;
   let origin;
   try {
-    const url = new URL(baseUrl);
-    if (!/^https?:$/.test(url.protocol)) throw new Error('bad protocol');
-    origin = `${url.origin}/*`;
-  } catch {
-    throw new Error(t('optBadUrl'));
+    origin = `${new URL(assertSafeBaseUrl(baseUrl)).origin}/*`;
+  } catch (error) {
+    throw new Error(error.message);
   }
   if (await chrome.permissions.contains({ origins: [origin] })) return true;
   return chrome.permissions.request({ origins: [origin] });
@@ -93,6 +91,13 @@ async function refreshModels() {
   } catch (error) {
     say(t('optModelsFailed', error.message), true);
   }
+}
+
+async function clearAll() {
+  if (!window.confirm(t('optClearConfirm'))) return;
+  await chrome.storage.local.clear();
+  try { await chrome.permissions.remove({ origins: ['https://*/*', 'http://localhost/*', 'http://127.0.0.1/*'] }); } catch { /* none granted */ }
+  location.reload();
 }
 
 async function save() {
@@ -162,6 +167,7 @@ async function test() {
   }
   $('test').addEventListener('click', test);
   $('refreshModels').addEventListener('click', refreshModels);
+  $('clearData').addEventListener('click', clearAll);
   $('modelSelect').addEventListener('change', () => {
     $('model').classList.toggle('hidden', $('modelSelect').value !== CUSTOM);
     if ($('modelSelect').value === CUSTOM) $('model').focus(); else save();

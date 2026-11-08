@@ -1,6 +1,6 @@
 // Offline checks: mocks fetch and verifies each provider's request shape and reply parsing.
 import assert from 'node:assert/strict';
-import { callAI, listModels, PROVIDERS } from '../lib/providers.js';
+import { callAI, listModels, assertSafeBaseUrl, PROVIDERS } from '../lib/providers.js';
 import { buildRequest } from '../lib/prompts.js';
 
 const calls = [];
@@ -52,6 +52,16 @@ await assert.rejects(listModels({ provider: 'openai', apiKey: '' }), /No API key
 globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: 'bad key' } }), { status: 401 });
 await assert.rejects(callAI({ provider: 'openai', apiKey: 'k' }, 's', 'u'), /401: bad key/);
 await assert.rejects(callAI({ provider: 'openai', apiKey: '' }, 's', 'u'), /No API key/);
+
+// Security: endpoint rules, redirects, key scrubbing
+assert.equal(assertSafeBaseUrl('https://proxy.example.com/v1/'), 'https://proxy.example.com/v1');
+assert.equal(assertSafeBaseUrl('http://localhost:11434/v1'), 'http://localhost:11434/v1');
+for (const bad of ['http://proxy.example.com/v1', 'ftp://x.com', 'not a url', 'https://user:pw@x.com/v1']) assert.throws(() => assertSafeBaseUrl(bad), bad);
+await assert.rejects(callAI({ provider: 'openai', apiKey: 'k', baseUrl: 'http://evil.example.com' }, 's', 'u'), /https/);
+let seenRedirect;
+globalThis.fetch = async (u, init) => { seenRedirect = init.redirect; return new Response('{"error":{"message":"bad key sk-SECRET123"}}', { status: 401 }); };
+await assert.rejects(callAI({ provider: 'openai', apiKey: 'sk-SECRET123' }, 's', 'u'), (e) => !e.message.includes('SECRET123') && e.message.includes('***'));
+assert.equal(seenRedirect, 'error');
 
 // Prompts: language-agnostic defaults, language rules appended from settings
 const auto = buildRequest('translate', 'x', { targetLanguage: 'auto', primaryLanguage: '日本語' }).system;

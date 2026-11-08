@@ -241,5 +241,17 @@
   },
   "optModelCustomPlaceholder": {
     "message": "Model ID"
+  },
+  "optPrivacy": {
+    "message": "Privacy & data"
+  },
+  "optPrivacyText": {
+    "message": "API keys and settings are stored only in this browser profile (chrome.storage.local), unencrypted, and are never synced or sent anywhere except to the AI provider you chose. Text you translate or polish is sent to that provider and nowhere else. There is no Luna server and no analytics."
+  },
+  "optClear": {
+    "message": "Delete all saved data"
+  },
+  "optClearConfirm": {
+    "message": "Delete all API keys and settings stored by this extension? This cannot be undone."
   }
 }
