@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"><title>shot5</title>
+<link rel="stylesheet" href="/store/scenes/scene.css"><script src="/store/scenes/dark.js"></script><script>window.__css = window.loadDark("/ui.css");</script>
+<style>#mount { position: absolute; right: 22px; top: 6px; width: 380px; zoom: .78; background: var(--bg); border: 1px solid #2b3358; border-radius: 16px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.85), 0 0 80px -30px rgba(90,204,237,.5); }
+ #mount.popup { padding: 12px; } #mount textarea { min-height: 76px; } #mount .output { max-height: none; } body { color: var(--ink); }
+ .tb { margin-left: auto; width: 22px; height: 22px; } .web article { margin-left: 56px; }</style></head><body>
+<div class="bg"></div>
+<div class="cap"><h1><span lang="en">Polish your writing. <em>Sound like yourself.</em></span><span lang="zh">润色你的文字，<em>依然是你的语气。</em></span></h1><p><span lang="en">Fix grammar and word choice, then pick the tone that fits.</span><span lang="zh">修正语法和措辞，再挑选合适的语气。</span></p></div>
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span>shop.example.com/contact</span><svg class="tb" viewBox="0 0 128 128"><rect x="8" y="8" width="112" height="112" rx="30" fill="#252839"/><path d="M41 35v53h43" fill="none" stroke="#5ACCED" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 29c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21-15 0-21-6-21-21Z" fill="#5ACCED"/></svg></div>
+<div class="stage"><div class="web"><div class="top">Support</div><article><h2>Contact us</h2><div class="meta">We usually reply within one business day.</div><p>Hello, I am writing for ask about the price of the product, please reply me as soon as possible.</p><p>Thank you.</p></article></div>
+<div id="mount" class="popup"></div></div></div>
+<script>window.SCENE = { settings: { provider: 'openrouter', apiKeys: { openrouter: 'demo' } }, mode: 'polish',
+ en: { text: "Hello, I am writing for ask about the price of the product, please reply me as soon as possible.", result: "### Casual Tone\n***Warm:***\n>Hi there! I'd love to know the price of this product. Could you get back to me when you have a moment? Thank you so much!\n\n***Neutral:***\n>Hello, I am writing to ask about the price of the product. Please reply as soon as possible.\n\n***Cool:***\n>Hey, what's the price on this one? Let me know when you can." },
+ zh: { text: "Hello, I am writing for ask about the price of the product, please reply me as soon as possible.", result: "### Casual Tone\n***Warm:***\n>Hi there! I'd love to know the price of this product. Could you get back to me when you have a moment? Thank you so much!\n\n***Neutral:***\n>Hello, I am writing to ask about the price of the product. Please reply as soon as possible.\n\n***Cool:***\n>Hey, what's the price on this one? Let me know when you can." } };</script>
+<script src="/store/scenes/stub.js"></script>
+<script src="/lib/render.js"></script>
+<script type="module">
+ await window.__css;
+ const html = await (await fetch('/popup.html')).text();
+ const doc = new DOMParser().parseFromString(html, 'text/html');
+ doc.querySelectorAll('script').forEach((s) => s.remove());
+ document.getElementById('mount').innerHTML = doc.body.innerHTML;
+ await import('/popup.js');
+ await new Promise((r) => setTimeout(r, 300));
+ const S = window.SCENE[document.documentElement.dataset.lang];
+ const input = document.getElementById('input'); input.value = S.text; input.dispatchEvent(new Event('input'));
+ document.getElementById('run').click();
+</script></body></html>
