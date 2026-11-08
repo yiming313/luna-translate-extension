@@ -1,0 +1,201 @@
+{
+  "extName": {
+    "message": "Luna Translate"
+  },
+  "extDescription": {
+    "message": "Translate and polish selected text with your own AI key: OpenRouter, OpenAI, Anthropic or Google Gemini."
+  },
+  "cmdTranslate": {
+    "message": "Translate selected text"
+  },
+  "cmdPolish": {
+    "message": "Polish selected text"
+  },
+  "cmdPopup": {
+    "message": "Open Luna Translate"
+  },
+  "modeTranslate": {
+    "message": "Translate"
+  },
+  "modePolish": {
+    "message": "Polish"
+  },
+  "loadingTranslate": {
+    "message": "Translating…"
+  },
+  "loadingPolish": {
+    "message": "Polishing…"
+  },
+  "working": {
+    "message": "Working…"
+  },
+  "copy": {
+    "message": "Copy"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "copyFailed": {
+    "message": "Copy failed"
+  },
+  "replaceOriginal": {
+    "message": "Replace original"
+  },
+  "replaced": {
+    "message": "Replaced"
+  },
+  "replaceFailed": {
+    "message": "Can't replace"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "errNoText": {
+    "message": "Select or enter some text first."
+  },
+  "errTooLong": {
+    "message": "Text is too long (limit $MAX$ characters).",
+    "placeholders": {
+      "max": {
+        "content": "$1"
+      }
+    }
+  },
+  "errNoKey": {
+    "message": "No API key yet. Open the extension settings first."
+  },
+  "errRequestFailed": {
+    "message": "Request failed"
+  },
+  "popupSettings": {
+    "message": "Settings"
+  },
+  "popupPlaceholder": {
+    "message": "Type or paste text. Ctrl/⌘ + Enter to run."
+  },
+  "popupInputLabel": {
+    "message": "Input text"
+  },
+  "popupNoKey": {
+    "message": "No API key yet. Click ⚙ at the top right to add an OpenRouter, OpenAI, Anthropic or Gemini key."
+  },
+  "optPageTitle": {
+    "message": "Luna Translate Settings"
+  },
+  "optIntro": {
+    "message": "Pick an AI provider and enter your own API key. The key is stored only in this browser and is sent only to the provider you choose."
+  },
+  "optProvider": {
+    "message": "AI provider"
+  },
+  "optApiKey": {
+    "message": "API key"
+  },
+  "optGetKey": {
+    "message": "Get a key ↗"
+  },
+  "optModel": {
+    "message": "Model"
+  },
+  "optBaseUrl": {
+    "message": "Custom endpoint (optional)"
+  },
+  "optBaseUrlPlaceholder": {
+    "message": "Leave empty to use the official endpoint"
+  },
+  "optBaseUrlHelp": {
+    "message": "For proxies and compatible APIs. The browser asks for access to that host when you save."
+  },
+  "optTest": {
+    "message": "Test connection"
+  },
+  "optSave": {
+    "message": "Save"
+  },
+  "optTesting": {
+    "message": "Testing…"
+  },
+  "optTestOk": {
+    "message": "Connected ($REPLY$)",
+    "placeholders": {
+      "reply": {
+        "content": "$1"
+      }
+    }
+  },
+  "optTestFail": {
+    "message": "Connection failed: $ERROR$",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  },
+  "optSaved": {
+    "message": "Saved."
+  },
+  "optPermDenied": {
+    "message": "Access to that endpoint was not granted."
+  },
+  "optBadUrl": {
+    "message": "The custom endpoint is not a valid URL."
+  },
+  "optSectionLang": {
+    "message": "Translate & polish"
+  },
+  "optPrimary": {
+    "message": "My main language"
+  },
+  "optPrimaryHelp": {
+    "message": "Default translation target. Text already in this language is translated into your second language."
+  },
+  "optSecondary": {
+    "message": "My second language"
+  },
+  "optTarget": {
+    "message": "Translation target"
+  },
+  "optTargetAuto": {
+    "message": "Automatic (main ↔ second language)"
+  },
+  "optPolishLang": {
+    "message": "Polish output language"
+  },
+  "optPolishSame": {
+    "message": "Same as the text"
+  },
+  "optTranslatePrompt": {
+    "message": "Translate prompt (empty = default)"
+  },
+  "optPolishPrompt": {
+    "message": "Polish prompt (empty = default)"
+  },
+  "optUsage": {
+    "message": "How to use"
+  },
+  "optUsage1": {
+    "message": "Select text on a page, right-click, then choose “Luna: Translate / Polish”."
+  },
+  "optUsage2": {
+    "message": "Shortcuts: Alt+T translates the selection, Alt+P polishes it, Alt+L opens the popup (change them at chrome://extensions/shortcuts)."
+  },
+  "optUsage3": {
+    "message": "In text fields, the result card has a “Replace original” button."
+  },
+  "menuTranslate": {
+    "message": "Luna: Translate “$SEL$”",
+    "placeholders": {
+      "sel": {
+        "content": "%s"
+      }
+    }
+  },
+  "menuPolish": {
+    "message": "Luna: Polish “$SEL$”",
+    "placeholders": {
+      "sel": {
+        "content": "%s"
+      }
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "extName": {
+    "message": "Luna Translate"
+  },
+  "extDescription": {
+    "message": "用你自己的 AI Key（OpenRouter、OpenAI、Anthropic 或 Google Gemini）翻译和润色选中的文字。"
+  },
+  "cmdTranslate": {
+    "message": "翻译选中的文字"
+  },
+  "cmdPolish": {
+    "message": "润色选中的文字"
+  },
+  "cmdPopup": {
+    "message": "打开 Luna Translate"
+  },
+  "modeTranslate": {
+    "message": "翻译"
+  },
+  "modePolish": {
+    "message": "润色"
+  },
+  "loadingTranslate": {
+    "message": "正在翻译…"
+  },
+  "loadingPolish": {
+    "message": "正在润色…"
+  },
+  "working": {
+    "message": "处理中…"
+  },
+  "copy": {
+    "message": "复制"
+  },
+  "copied": {
+    "message": "已复制"
+  },
+  "copyFailed": {
+    "message": "复制失败"
+  },
+  "replaceOriginal": {
+    "message": "替换原文"
+  },
+  "replaced": {
+    "message": "已替换"
+  },
+  "replaceFailed": {
+    "message": "无法替换"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "errNoText": {
+    "message": "请先选中或输入文本。"
+  },
+  "errTooLong": {
+    "message": "文本过长（上限 $MAX$ 字符）。",
+    "placeholders": {
+      "max": {
+        "content": "$1"
+      }
+    }
+  },
+  "errNoKey": {
+    "message": "还没有设置 API Key，请先打开扩展设置。"
+  },
+  "errRequestFailed": {
+    "message": "请求失败"
+  },
+  "popupSettings": {
+    "message": "设置"
+  },
+  "popupPlaceholder": {
+    "message": "输入或粘贴文本，Ctrl/⌘ + Enter 运行"
+  },
+  "popupInputLabel": {
+    "message": "输入文本"
+  },
+  "popupNoKey": {
+    "message": "还没有设置 API Key。点击右上角 ⚙ 添加 OpenRouter / OpenAI / Anthropic / Gemini 的 Key。"
+  },
+  "optPageTitle": {
+    "message": "Luna Translate 设置"
+  },
+  "optIntro": {
+    "message": "选择一个 AI 服务并填入你自己的 API Key。Key 只保存在本机浏览器中，只会发送给你选择的服务商。"
+  },
+  "optProvider": {
+    "message": "AI 服务商"
+  },
+  "optApiKey": {
+    "message": "API Key"
+  },
+  "optGetKey": {
+    "message": "获取 Key ↗"
+  },
+  "optModel": {
+    "message": "模型"
+  },
+  "optBaseUrl": {
+    "message": "自定义接口地址（可选）"
+  },
+  "optBaseUrlPlaceholder": {
+    "message": "留空使用官方地址"
+  },
+  "optBaseUrlHelp": {
+    "message": "用于代理或兼容接口。保存时浏览器会请求访问该域名的权限。"
+  },
+  "optTest": {
+    "message": "测试连接"
+  },
+  "optSave": {
+    "message": "保存"
+  },
+  "optTesting": {
+    "message": "测试中…"
+  },
+  "optTestOk": {
+    "message": "连接成功（$REPLY$）",
+    "placeholders": {
+      "reply": {
+        "content": "$1"
+      }
+    }
+  },
+  "optTestFail": {
+    "message": "连接失败：$ERROR$",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  },
+  "optSaved": {
+    "message": "已保存。"
+  },
+  "optPermDenied": {
+    "message": "未授予访问该接口地址的权限。"
+  },
+  "optBadUrl": {
+    "message": "自定义接口地址格式不正确。"
+  },
+  "optSectionLang": {
+    "message": "翻译与润色"
+  },
+  "optPrimary": {
+    "message": "我的主要语言"
+  },
+  "optPrimaryHelp": {
+    "message": "默认翻译目标。文本已经是这种语言时，会改译成你的第二语言。"
+  },
+  "optSecondary": {
+    "message": "我的第二语言"
+  },
+  "optTarget": {
+    "message": "翻译目标语言"
+  },
+  "optTargetAuto": {
+    "message": "自动（主要语言 ↔ 第二语言）"
+  },
+  "optPolishLang": {
+    "message": "润色输出语言"
+  },
+  "optPolishSame": {
+    "message": "与原文相同"
+  },
+  "optTranslatePrompt": {
+    "message": "翻译提示词（留空使用默认）"
+  },
+  "optPolishPrompt": {
+    "message": "润色提示词（留空使用默认）"
+  },
+  "optUsage": {
+    "message": "使用方式"
+  },
+  "optUsage1": {
+    "message": "选中网页文字 → 右键 → “Luna：翻译 / 润色”。"
+  },
+  "optUsage2": {
+    "message": "快捷键：Alt+T 翻译选中文字，Alt+P 润色，Alt+L 打开弹窗（可在 chrome://extensions/shortcuts 修改）。"
+  },
+  "optUsage3": {
+    "message": "在输入框中选中文字后，结果卡片里有“替换原文”按钮。"
+  },
+  "menuTranslate": {
+    "message": "Luna：翻译“$SEL$”",
+    "placeholders": {
+      "sel": {
+        "content": "%s"
+      }
+    }
+  },
+  "menuPolish": {
+    "message": "Luna：润色“$SEL$”",
+    "placeholders": {
+      "sel": {
+        "content": "%s"
+      }
+    }
+  }
+}

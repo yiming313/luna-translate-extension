@@ -1,6 +1,7 @@
 import { PROVIDERS, callAI } from './lib/providers.js';
 import { LANGUAGES } from './lib/prompts.js';
 import { loadSettings, saveSettings } from './lib/storage.js';
+import { t, applyI18n } from './lib/i18n.js';
 
 const $ = (id) => document.getElementById(id);
 const statusEl = $('status');
@@ -54,7 +55,7 @@ async function ensureHostPermission(baseUrl) {
     if (!/^https?:$/.test(url.protocol)) throw new Error('bad protocol');
     origin = `${url.origin}/*`;
   } catch {
-    throw new Error('自定义接口地址格式不正确。');
+    throw new Error(t('optBadUrl'));
   }
   if (await chrome.permissions.contains({ origins: [origin] })) return true;
   return chrome.permissions.request({ origins: [origin] });
@@ -64,14 +65,15 @@ async function save() {
   stashCurrent();
   settings.provider = provider;
   settings.primaryLanguage = $('primaryLanguage').value;
+  settings.secondaryLanguage = $('secondaryLanguage').value;
   settings.targetLanguage = $('targetLanguage').value;
   settings.polishLanguage = $('polishLanguage').value;
   settings.translatePrompt = $('translatePrompt').value;
   settings.polishPrompt = $('polishPrompt').value;
   try {
-    if (!(await ensureHostPermission(settings.baseUrls[provider]))) throw new Error('未授予访问该接口地址的权限。');
+    if (!(await ensureHostPermission(settings.baseUrls[provider]))) throw new Error(t('optPermDenied'));
     await saveSettings(settings);
-    say('已保存。');
+    say(t('optSaved'));
   } catch (error) {
     say(error.message, true);
   }
@@ -79,17 +81,18 @@ async function save() {
 
 async function test() {
   const config = currentConfig();
-  say('测试中…');
+  say(t('optTesting'));
   try {
-    if (!(await ensureHostPermission(config.baseUrl))) throw new Error('未授予访问该接口地址的权限。');
+    if (!(await ensureHostPermission(config.baseUrl))) throw new Error(t('optPermDenied'));
     const reply = await callAI(config, 'Reply with the single word: ok', 'ping');
-    say(`连接成功（${reply.slice(0, 40)}）`);
+    say(t('optTestOk', reply.slice(0, 40)));
   } catch (error) {
-    say(`连接失败：${error.message}`, true);
+    say(t('optTestFail', error.message), true);
   }
 }
 
 (async function init() {
+  applyI18n();
   settings = await loadSettings();
   const box = $('providers');
   for (const [id, spec] of Object.entries(PROVIDERS)) {
@@ -102,12 +105,16 @@ async function test() {
     button.addEventListener('click', () => { stashCurrent(); showProvider(id); });
     box.append(button);
   }
-  for (const [value, label] of LANGUAGES) $('primaryLanguage').append(new Option(label, value));
-  $('targetLanguage').append(new Option('自动（主要语言 ↔ 英文）', 'auto'));
+  for (const [value, label] of LANGUAGES) {
+    $('primaryLanguage').append(new Option(label, value));
+    $('secondaryLanguage').append(new Option(label, value));
+  }
+  $('targetLanguage').append(new Option(t('optTargetAuto'), 'auto'));
   for (const [value, label] of LANGUAGES) $('targetLanguage').append(new Option(label, value));
-  $('polishLanguage').append(new Option('与原文相同', 'same'));
+  $('polishLanguage').append(new Option(t('optPolishSame'), 'same'));
   for (const [value, label] of LANGUAGES) $('polishLanguage').append(new Option(label, value));
   $('primaryLanguage').value = settings.primaryLanguage;
+  $('secondaryLanguage').value = settings.secondaryLanguage;
   $('targetLanguage').value = settings.targetLanguage;
   $('polishLanguage').value = settings.polishLanguage;
   $('translatePrompt').value = settings.translatePrompt;

@@ -43,7 +43,7 @@
   close.className = 'close';
   close.type = 'button';
   close.textContent = '×';
-  close.setAttribute('aria-label', 'Close');
+  close.setAttribute('aria-label', chrome.i18n.getMessage('close'));
   header.append(title, close);
   const body = document.createElement('div');
   body.className = 'body';
@@ -112,7 +112,7 @@
     if (message.status === 'loading') {
       const p = document.createElement('p');
       p.className = 'status';
-      p.textContent = `正在${message.label}…`;
+      p.textContent = message.loading;
       area.append(p);
     } else if (message.status === 'error') {
       const p = document.createElement('p');
@@ -121,16 +121,16 @@
       area.append(p);
     } else {
       const actions = [{
-        label: '复制',
+        label: chrome.i18n.getMessage('copy'),
         onClick: async (text, button) => {
-          try { await navigator.clipboard.writeText(text); button.textContent = '已复制'; } catch { button.textContent = '复制失败'; }
+          try { await navigator.clipboard.writeText(text); button.textContent = chrome.i18n.getMessage('copied'); } catch { button.textContent = chrome.i18n.getMessage('copyFailed'); }
         },
       }];
       if (target) {
         actions.push({
-          label: '替换原文',
+          label: chrome.i18n.getMessage('replaceOriginal'),
           onClick: (text, button) => {
-            button.textContent = replaceSelection(text) ? '已替换' : '无法替换';
+            button.textContent = chrome.i18n.getMessage(replaceSelection(text) ? 'replaced' : 'replaceFailed');
           },
         });
       }

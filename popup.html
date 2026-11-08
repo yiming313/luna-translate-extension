@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,18 +10,18 @@
   <header class="bar">
     <strong>Luna Translate</strong>
     <span class="provider-pill" id="providerPill"></span>
-    <button type="button" class="icon-btn" id="openOptions" title="设置" aria-label="设置">⚙</button>
+    <button type="button" class="icon-btn" id="openOptions" data-i18n-label="popupSettings">⚙</button>
   </header>
 
-  <div class="tabs" role="tablist" aria-label="模式">
-    <button type="button" role="tab" class="tab is-active" data-mode="translate" aria-selected="true">翻译</button>
-    <button type="button" role="tab" class="tab" data-mode="polish" aria-selected="false">润色</button>
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" class="tab is-active" data-mode="translate" aria-selected="true" data-i18n="modeTranslate"></button>
+    <button type="button" role="tab" class="tab" data-mode="polish" aria-selected="false" data-i18n="modePolish"></button>
   </div>
 
-  <textarea id="input" maxlength="8000" placeholder="输入或粘贴文本，Ctrl/⌘ + Enter 运行" aria-label="输入文本"></textarea>
+  <textarea id="input" maxlength="8000" data-i18n-placeholder="popupPlaceholder" data-i18n-label="popupInputLabel"></textarea>
   <div class="row">
     <span class="muted" id="counter">0 / 8000</span>
-    <button type="button" class="primary" id="run">翻译</button>
+    <button type="button" class="primary" id="run"></button>
   </div>
 
   <div id="notice" class="notice hidden" role="alert"></div>

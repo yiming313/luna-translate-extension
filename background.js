@@ -1,6 +1,7 @@
 import { callAI } from './lib/providers.js';
 import { buildRequest, MODES } from './lib/prompts.js';
 import { loadSettings, activeConfig } from './lib/storage.js';
+import { t } from './lib/i18n.js';
 
 const MAX_INPUT_CHARS = 8000;
 
@@ -8,11 +9,11 @@ const MAX_INPUT_CHARS = 8000;
 async function runAI(mode, text) {
   try {
     const trimmed = String(text || '').trim();
-    if (!trimmed) throw new Error('请先选中或输入文本。');
-    if (trimmed.length > MAX_INPUT_CHARS) throw new Error(`文本过长（上限 ${MAX_INPUT_CHARS} 字符）。`);
+    if (!trimmed) throw new Error(t('errNoText'));
+    if (trimmed.length > MAX_INPUT_CHARS) throw new Error(t('errTooLong', MAX_INPUT_CHARS));
     const settings = await loadSettings();
     const config = activeConfig(settings);
-    if (!config.apiKey) throw new Error('还没有设置 API Key，请先打开扩展设置。');
+    if (!config.apiKey) throw new Error(t('errNoKey'));
     const { system, user } = buildRequest(mode, trimmed, settings);
     const result = await callAI(config, system, user);
     return { ok: true, result };
@@ -23,8 +24,8 @@ async function runAI(mode, text) {
 
 function createMenus() {
   chrome.contextMenus.removeAll(() => {
-    chrome.contextMenus.create({ id: 'luna-translate', title: 'Luna：翻译“%s”', contexts: ['selection'] });
-    chrome.contextMenus.create({ id: 'luna-polish', title: 'Luna：润色“%s”', contexts: ['selection'] });
+    chrome.contextMenus.create({ id: 'luna-translate', title: t('menuTranslate'), contexts: ['selection'] });
+    chrome.contextMenus.create({ id: 'luna-polish', title: t('menuPolish'), contexts: ['selection'] });
   });
 }
 
@@ -40,15 +41,16 @@ async function showInTab(tabId, payload) {
 }
 
 async function handleSelection(tabId, mode, text) {
-  const label = MODES[mode].label;
+  const label = t(MODES[mode].labelKey);
+  const loading = t(MODES[mode].loadingKey);
   try {
-    await showInTab(tabId, { mode, label, text, status: 'loading' });
+    await showInTab(tabId, { mode, label, loading, text, status: 'loading' });
   } catch {
     // Pages such as chrome:// or the Web Store cannot be scripted.
     return;
   }
   const outcome = await runAI(mode, text);
-  await chrome.tabs.sendMessage(tabId, { type: 'luna-show', mode, label, text, status: outcome.ok ? 'done' : 'error', ...outcome }).catch(() => {});
+  await chrome.tabs.sendMessage(tabId, { type: 'luna-show', mode, label, loading, text, status: outcome.ok ? 'done' : 'error', ...outcome }).catch(() => {});
 }
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {

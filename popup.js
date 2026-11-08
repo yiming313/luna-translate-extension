@@ -1,6 +1,7 @@
 import { loadSettings } from './lib/storage.js';
 import { PROVIDERS } from './lib/providers.js';
 import { MODES } from './lib/prompts.js';
+import { t, applyI18n } from './lib/i18n.js';
 
 const $ = (id) => document.getElementById(id);
 const input = $('input');
@@ -17,7 +18,7 @@ function setMode(next) {
     tab.classList.toggle('is-active', active);
     tab.setAttribute('aria-selected', String(active));
   });
-  runButton.textContent = MODES[mode].label;
+  runButton.textContent = t(MODES[mode].labelKey);
   chrome.storage.local.set({ popupMode: mode }).catch(() => {});
 }
 
@@ -29,19 +30,19 @@ function showNotice(text) {
 async function run() {
   if (busy) return;
   const text = input.value.trim();
-  if (!text) { showNotice('请输入需要处理的文本。'); return; }
+  if (!text) { showNotice(t('errNoText')); return; }
   busy = true;
   runButton.disabled = true;
-  runButton.textContent = '处理中…';
+  runButton.textContent = t('working');
   showNotice('');
   output.replaceChildren();
   try {
     const response = await chrome.runtime.sendMessage({ type: 'luna-run', mode, text });
-    if (!response?.ok) throw new Error(response?.error || '请求失败');
+    if (!response?.ok) throw new Error(response?.error || t('errRequestFailed'));
     window.LunaRender.render(output, response.result, [{
-      label: '复制',
+      label: t('copy'),
       onClick: async (block, button) => {
-        try { await navigator.clipboard.writeText(block); button.textContent = '已复制'; } catch { button.textContent = '复制失败'; }
+        try { await navigator.clipboard.writeText(block); button.textContent = t('copied'); } catch { button.textContent = t('copyFailed'); }
       },
     }]);
   } catch (error) {
@@ -49,7 +50,7 @@ async function run() {
   } finally {
     busy = false;
     runButton.disabled = false;
-    runButton.textContent = MODES[mode].label;
+    runButton.textContent = t(MODES[mode].labelKey);
   }
 }
 
@@ -62,11 +63,12 @@ input.addEventListener('input', () => { $('counter').textContent = `${input.valu
 $('openOptions').addEventListener('click', () => chrome.runtime.openOptionsPage());
 
 (async function init() {
+  applyI18n();
   const settings = await loadSettings();
   const spec = PROVIDERS[settings.provider];
   $('providerPill').textContent = spec ? spec.label : '';
   if (!settings.apiKeys?.[settings.provider]) {
-    showNotice('还没有设置 API Key。点击右上角 ⚙ 添加 OpenRouter / OpenAI / Anthropic / Gemini 的 Key。');
+    showNotice(t('popupNoKey'));
   }
   const stored = await chrome.storage.local.get('popupMode');
   setMode(MODES[stored.popupMode] ? stored.popupMode : 'translate');

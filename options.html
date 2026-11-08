@@ -1,72 +1,76 @@
 <!doctype html>
-<html lang="zh-CN">
+<html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luna Translate 设置</title>
+  <title>Luna Translate</title>
   <link rel="stylesheet" href="ui.css" />
 </head>
 <body class="options">
   <main>
-    <h1>Luna Translate 设置</h1>
-    <p class="muted">选择一个 AI 服务并填入你自己的 API Key。Key 只保存在本机浏览器中，只会发送给你选择的服务商。</p>
+    <h1 data-i18n="optPageTitle"></h1>
+    <p class="muted" data-i18n="optIntro"></p>
 
     <section class="card">
-      <h2>AI 服务商</h2>
-      <div class="providers" id="providers" role="radiogroup" aria-label="AI 服务商"></div>
+      <h2 data-i18n="optProvider"></h2>
+      <div class="providers" id="providers" role="radiogroup" data-i18n-label="optProvider"></div>
 
       <label class="field">
-        <span>API Key <a id="keyLink" href="#" target="_blank" rel="noopener noreferrer">获取 Key ↗</a></span>
+        <span><span data-i18n="optApiKey"></span> <a id="keyLink" href="#" target="_blank" rel="noopener noreferrer" data-i18n="optGetKey"></a></span>
         <input id="apiKey" type="password" autocomplete="off" spellcheck="false" />
       </label>
       <label class="field">
-        <span>模型</span>
+        <span data-i18n="optModel"></span>
         <input id="model" list="modelList" autocomplete="off" spellcheck="false" />
         <datalist id="modelList"></datalist>
       </label>
       <label class="field">
-        <span>自定义接口地址（可选）</span>
-        <input id="baseUrl" type="url" autocomplete="off" spellcheck="false" placeholder="留空使用官方地址" />
-        <small class="muted">用于代理或兼容接口。保存时浏览器会请求访问该域名的权限。</small>
+        <span data-i18n="optBaseUrl"></span>
+        <input id="baseUrl" type="url" autocomplete="off" spellcheck="false" data-i18n-placeholder="optBaseUrlPlaceholder" />
+        <small class="muted" data-i18n="optBaseUrlHelp"></small>
       </label>
       <div class="row">
-        <button type="button" id="test">测试连接</button>
-        <button type="button" class="primary" id="save">保存</button>
+        <button type="button" id="test" data-i18n="optTest"></button>
+        <button type="button" class="primary" id="save" data-i18n="optSave"></button>
         <span id="status" class="muted" role="status" aria-live="polite"></span>
       </div>
     </section>
 
     <section class="card">
-      <h2>翻译与润色</h2>
+      <h2 data-i18n="optSectionLang"></h2>
       <label class="field">
-        <span>我的主要语言</span>
+        <span data-i18n="optPrimary"></span>
         <select id="primaryLanguage"></select>
-        <small class="muted">默认翻译目标。文本已经是这种语言时，会改译成英文。</small>
+        <small class="muted" data-i18n="optPrimaryHelp"></small>
       </label>
       <label class="field">
-        <span>翻译目标语言</span>
+        <span data-i18n="optSecondary"></span>
+        <select id="secondaryLanguage"></select>
+      </label>
+      <label class="field">
+        <span data-i18n="optTarget"></span>
         <select id="targetLanguage"></select>
       </label>
       <label class="field">
-        <span>润色输出语言</span>
+        <span data-i18n="optPolishLang"></span>
         <select id="polishLanguage"></select>
       </label>
       <label class="field">
-        <span>翻译提示词（留空使用默认）</span>
+        <span data-i18n="optTranslatePrompt"></span>
         <textarea id="translatePrompt" rows="5"></textarea>
       </label>
       <label class="field">
-        <span>润色提示词（留空使用默认）</span>
+        <span data-i18n="optPolishPrompt"></span>
         <textarea id="polishPrompt" rows="8"></textarea>
       </label>
     </section>
 
     <section class="card">
-      <h2>使用方式</h2>
+      <h2 data-i18n="optUsage"></h2>
       <ul class="muted">
-        <li>选中网页文字 → 右键 → “Luna：翻译 / 润色”。</li>
-        <li>快捷键：Alt+T 翻译选中文字，Alt+P 润色，Alt+L 打开弹窗（可在 chrome://extensions/shortcuts 修改）。</li>
-        <li>在输入框中选中文字后润色，可以直接点“替换原文”。</li>
+        <li data-i18n="optUsage1"></li>
+        <li data-i18n="optUsage2"></li>
+        <li data-i18n="optUsage3"></li>
       </ul>
     </section>
   </main>

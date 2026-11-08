@@ -45,10 +45,24 @@ assert.match(auto, /Target language: 日本語\. If the text is already in 日�
 assert.match(auto, /fluent in every language/);
 assert.doesNotMatch(auto, /English teacher/);
 assert.match(buildRequest('translate', 'x', { targetLanguage: 'Français' }).system, /Target language: Français\.$/);
-assert.match(buildRequest('translate', 'x', {}).system, /Target language: 简体中文/);
+assert.match(buildRequest('translate', 'x', { primaryLanguage: '简体中文' }).system, /Target language: 简体中文/);
 const pol = buildRequest('polish', 'x', {}).system;
 assert.match(pol, /same language as the original/);
 assert.doesNotMatch(pol, /Target language/);
 assert.match(buildRequest('polish', 'x', { polishLanguage: 'Deutsch' }).system, /in Deutsch\.$/);
 assert.ok(buildRequest('translate', 'x', { translatePrompt: 'custom' }).system.startsWith('custom'));
+assert.match(buildRequest('translate', 'x', { targetLanguage: 'auto', primaryLanguage: 'English', secondaryLanguage: '日本語' }).system, /Target language: English\. If the text is already in English, translate it into 日本語/);
+assert.match(buildRequest('translate', 'x', { primaryLanguage: 'English' }).system, /into Español instead/);
+
+// Locales: every locale has the same keys and every used key exists
+import fs from 'node:fs';
+const load = (l) => JSON.parse(fs.readFileSync(new URL(`../_locales/${l}/messages.json`, import.meta.url)));
+const en = load('en');
+for (const l of ['zh_CN', 'zh_TW']) assert.deepEqual(Object.keys(load(l)).sort(), Object.keys(en).sort(), l);
+const src = ['background.js', 'content.js', 'popup.js', 'options.js', 'popup.html', 'options.html', 'lib/prompts.js']
+  .map((f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8')).join('\n');
+const used = new Set([...src.matchAll(/(?:\bt|getMessage)\(\s*'(\w+)'/g)].map((m) => m[1]));
+for (const m of src.matchAll(/(?:data-i18n(?:-placeholder|-label)?|labelKey|loadingKey)[=:]\s*["']?(\w+)/g)) used.add(m[1]);
+for (const m of fs.readFileSync(new URL('../manifest.json', import.meta.url), 'utf8').matchAll(/__MSG_(\w+)__/g)) used.add(m[1]);
+for (const key of used) if (!['i18n','label','placeholder'].includes(key)) assert.ok(en[key], `missing message: ${key}`);
 console.log('all checks passed');

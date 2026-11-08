@@ -16,11 +16,15 @@ Bring one of: **OpenRouter**, **OpenAI**, **Anthropic** or **Google Gemini** API
 - In text fields, the result card has a **Replace original** button.
 - The toolbar popup lets you paste text directly.
 
+## Languages
+
+The interface follows the browser language: English (default), 简体中文 and 繁體中文 are included, and any other browser language falls back to English. The "main language" setting also defaults from the browser language. To add a locale, copy `_locales/en/messages.json` to `_locales/<code>/` and translate the values (`scripts/test.mjs` checks that all locales have the same keys).
+
 ## Default prompts
 
 The prompts are language-agnostic: the model detects the input language itself, so any language pair works.
 
-- **Translate** returns three alternative translations (Warm / Neutral / Cool). The target is your *primary language* (set in options, default Simplified Chinese); text already in that language is translated into English. Pick a fixed target language in options to override.
+- **Translate** returns three alternative translations (Warm / Neutral / Cool). The target is your *main language* (default: the browser language); text already in that language is translated into your *second language* (default English).  Pick a fixed target language in options to override.
 - **Polish** returns three improved versions in the *same language* as the input (or a language you choose).
 
 Both prompts can be replaced in the options page.

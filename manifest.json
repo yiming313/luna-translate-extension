@@ -1,14 +1,34 @@
 {
   "manifest_version": 3,
-  "name": "Luna Translate",
+  "name": "__MSG_extName__",
   "version": "0.1.0",
-  "description": "Translate and polish selected text with your own AI key: OpenRouter, OpenAI, Anthropic or Google Gemini.",
-  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
-  "action": { "default_popup": "popup.html", "default_title": "Luna Translate" },
+  "description": "__MSG_extDescription__",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "__MSG_extName__"
+  },
   "options_page": "options.html",
-  "background": { "service_worker": "background.js", "type": "module" },
-  "permissions": ["storage", "contextMenus", "activeTab", "scripting"],
-  "optional_host_permissions": ["https://*/*", "http://localhost/*", "http://127.0.0.1/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "activeTab",
+    "scripting"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
   "host_permissions": [
     "https://openrouter.ai/*",
     "https://api.openai.com/*",
@@ -16,8 +36,24 @@
     "https://generativelanguage.googleapis.com/*"
   ],
   "commands": {
-    "_execute_action": { "suggested_key": { "default": "Alt+L" }, "description": "Open Luna Translate" },
-    "translate-selection": { "suggested_key": { "default": "Alt+T" }, "description": "Translate selected text" },
-    "polish-selection": { "suggested_key": { "default": "Alt+P" }, "description": "Polish selected text" }
-  }
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+L"
+      },
+      "description": "__MSG_cmdPopup__"
+    },
+    "translate-selection": {
+      "suggested_key": {
+        "default": "Alt+T"
+      },
+      "description": "__MSG_cmdTranslate__"
+    },
+    "polish-selection": {
+      "suggested_key": {
+        "default": "Alt+P"
+      },
+      "description": "__MSG_cmdPolish__"
+    }
+  },
+  "default_locale": "en"
 }
