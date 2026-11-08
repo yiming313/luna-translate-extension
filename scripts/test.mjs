@@ -39,8 +39,11 @@ globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: '
 await assert.rejects(callAI({ provider: 'openai', apiKey: 'k' }, 's', 'u'), /401: bad key/);
 await assert.rejects(callAI({ provider: 'openai', apiKey: '' }, 's', 'u'), /No API key/);
 
-// Prompts
-assert.match(buildRequest('translate', 'x', { targetLanguage: 'auto' }).system, /Simplified Chinese/);
-assert.match(buildRequest('translate', 'x', { targetLanguage: '日本語' }).system, /日本語/);
-assert.match(buildRequest('polish', 'x', {}).system, /Warm/);
+// Prompts: defaults are the website's Translate prompt, untouched unless a language is chosen
+const site = buildRequest('translate', 'x', { targetLanguage: 'auto' }).system;
+assert.match(site, /^You are an excellent English teacher\./);
+assert.match(site, /Casual Tone/);
+assert.equal(buildRequest('polish', 'x', {}).system, site);
+assert.match(buildRequest('translate', 'x', { targetLanguage: '日本語' }).system, /日本語\.$/);
+assert.ok(buildRequest('translate', 'x', { targetLanguage: 'auto', translatePrompt: 'custom' }).system.startsWith('custom'));
 console.log('all checks passed');

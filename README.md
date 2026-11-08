@@ -16,6 +16,10 @@ Bring one of: **OpenRouter**, **OpenAI**, **Anthropic** or **Google Gemini** API
 - In text fields, the result card has a **Replace original** button.
 - The toolbar popup lets you paste text directly.
 
+## Default prompt
+
+Translate and polish both default to the same prompt as the Luna website's Translate page: English input gets three polished alternatives (Warm / Neutral / Cool), and text in other languages gets three English translations in the same tones. Override either prompt in the options page; choosing a target language appends a "write the answer in …" line.
+
 ## Providers
 
 | Provider | Endpoint | Default model |
