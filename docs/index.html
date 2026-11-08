@@ -127,7 +127,7 @@
     .step::before { counter-increment: s; content: "0" counter(s); display: block; margin-bottom: 14px; font-family: var(--mono); font-size: 13px; color: var(--accent); }
     .step h3 { margin: 0 0 8px; font-size: 18px; }
     .step p { margin: 0; color: var(--muted); font-size: 15px; }
-    .step code, .install code { padding: 1px 7px; border-radius: 6px; background: rgba(255,255,255,.07); font-family: var(--mono); font-size: .88em; color: #d9def2; }
+    .step code { padding: 1px 7px; border-radius: 6px; background: rgba(255,255,255,.07); font-family: var(--mono); font-size: .88em; color: #d9def2; }
 
     /* shortcuts */
     .keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 46px; }
@@ -136,16 +136,9 @@
     kbd { display: inline-flex; gap: 5px; font-family: var(--mono); }
     kbd i { font-style: normal; min-width: 30px; padding: 4px 9px; text-align: center; color: var(--ink); border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 8px; background: var(--panel-2); font-size: 13px; }
 
-    /* install */
-    .install { margin-top: 46px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .install ol { margin: 0; padding: 0; list-style: none; counter-reset: i; }
-    .install li { position: relative; padding: 0 0 18px 44px; color: var(--muted); font-size: 15.5px; counter-increment: i; }
-    .install li::before { content: counter(i); position: absolute; left: 0; top: -1px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: var(--accent); border: 1px solid rgba(90,204,237,.35); background: var(--accent-soft); font-size: 13px; font-weight: 600; }
-    .install li strong { color: var(--ink); font-weight: 600; }
-    .install .card { padding: 32px; }
-    .privacy-list { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-    .privacy-list li { position: relative; padding-left: 26px; color: var(--muted); font-size: 15px; }
-    .privacy-list li::before { content: ""; position: absolute; left: 4px; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px rgba(90,204,237,.7); }
+    /* privacy */
+    .pgrid .card h3 { margin-top: 0; }
+    .pgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 46px; }
 
     /* closing */
     .closing { margin: 120px 0 0; padding: 70px 24px; text-align: center; border: 1px solid var(--line); border-radius: 28px; overflow: hidden; position: relative;
@@ -165,7 +158,7 @@
       .hero { grid-template-columns: 1fr; gap: 64px; padding-top: 48px; }
       .result { right: 8px; }
       .span-7, .span-5, .span-4, .span-6 { grid-column: span 12; }
-      .steps, .keys, .install { grid-template-columns: 1fr; }
+      .steps, .keys, .pgrid { grid-template-columns: 1fr; }
       .hide-sm { display: none; }
     }
     @media (max-width: 560px) {
@@ -191,7 +184,7 @@
       <div class="nav-right">
         <a class="hide-sm" href="#features"><span lang="zh">功能</span><span lang="en">Features</span></a>
         <a class="hide-sm" href="#how"><span lang="zh">使用方法</span><span lang="en">How it works</span></a>
-        <a class="hide-sm" href="#install"><span lang="zh">安装</span><span lang="en">Install</span></a>
+        <a class="hide-sm" href="#privacy"><span lang="zh">隐私</span><span lang="en">Privacy</span></a>
         <div class="lang" role="group" aria-label="Language"><button type="button" data-set="zh">中文</button><button type="button" data-set="en">EN</button></div>
       </div>
     </header>
@@ -207,9 +200,9 @@
             <span lang="en">Select text on any page, then right-click or press a shortcut to get a natural translation, or polished rewrites in three tones. Use the OpenRouter, OpenAI, Anthropic or Gemini key you already have — no new subscription.</span>
           </p>
           <div class="cta">
-            <a class="btn primary" href="#install">
+            <a class="btn primary store-link" href="#">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
-              <span lang="zh">安装扩展</span><span lang="en">Install the extension</span>
+              <span lang="zh">添加到 Chrome</span><span lang="en">Add to Chrome</span>
             </a>
             <a class="btn" href="#how"><span lang="zh">看看怎么用</span><span lang="en">See how it works</span></a>
           </div>
@@ -273,15 +266,6 @@
             <h3><span lang="zh">界面跟随浏览器</span><span lang="en">Speaks your browser's language</span></h3>
             <p><span lang="zh">内置 English、简体中文、繁體中文界面，自动匹配 Chrome 的语言。</span><span lang="en">English, 简体中文 and 繁體中文 are built in and follow Chrome's language automatically.</span></p>
           </article>
-          <article class="card span-12 reveal" style="grid-column: span 12">
-            <div style="display:grid; grid-template-columns: auto 1fr; gap: 22px; align-items:center">
-              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg></div>
-              <div>
-                <h3 style="margin:0 0 6px"><span lang="zh">你的 Key 和文字，只属于你</span><span lang="en">Your key and your text stay yours</span></h3>
-                <p><span lang="zh">Key 只保存在本机浏览器，不同步、不上传，只发给你选的服务商。没有 Luna 服务器，没有统计，也不收集任何数据。</span><span lang="en">Your key is stored only in this browser — never synced, never uploaded, sent only to the provider you choose. No Luna server, no analytics, no data collection.</span></p>
-              </div>
-            </div>
-          </article>
         </div>
       </section>
 
@@ -303,32 +287,18 @@
         </div>
       </section>
 
-      <!-- install -->
-      <section class="sec" id="install">
+      <!-- privacy -->
+      <section class="sec" id="privacy">
         <div class="reveal">
-          <div class="kicker"><span lang="zh">安装</span><span lang="en">Install</span></div>
-          <h2><span lang="zh">一分钟装好。</span><span lang="en">Installed in a minute.</span></h2>
-          <p class="sub"><span lang="zh">扩展还没有上架 Chrome 应用商店，目前通过“加载已解压的扩展程序”安装。</span><span lang="en">The extension is not on the Chrome Web Store yet, so install it with “Load unpacked”.</span></p>
+          <div class="kicker"><span lang="zh">隐私</span><span lang="en">Privacy</span></div>
+          <h2><span lang="zh">你的数据，只属于你。</span><span lang="en">Your data stays yours.</span></h2>
+          <p class="sub"><span lang="zh">没有 Luna 服务器，没有账号，没有统计。扩展只做一件事：把你选中的文字交给你自己选的 AI。</span><span lang="en">No Luna server, no account, no analytics. The extension does one thing: hand the text you select to the AI you chose.</span></p>
         </div>
-        <div class="install">
-          <div class="card reveal">
-            <ol>
-              <li><span lang="zh"><strong>解压</strong> <code>luna-translate-0.1.0.zip</code>，得到 <code>luna-translate</code> 文件夹。</span><span lang="en"><strong>Unzip</strong> <code>luna-translate-0.1.0.zip</code> to get a <code>luna-translate</code> folder.</span></li>
-              <li><span lang="zh">打开 <code>chrome://extensions</code>，开启右上角的<strong>开发者模式</strong>。</span><span lang="en">Open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> at the top right.</span></li>
-              <li><span lang="zh">点击<strong>加载已解压的扩展程序</strong>，选择 <code>luna-translate</code> 文件夹。</span><span lang="en">Click <strong>Load unpacked</strong> and choose the <code>luna-translate</code> folder.</span></li>
-              <li><span lang="zh">首次安装会打开设置页，<strong>填入 API Key</strong> 即可开始使用。</span><span lang="en">The settings page opens on first install — <strong>add your API key</strong> and you're ready.</span></li>
-            </ol>
-          </div>
-          <div class="card reveal">
-            <div class="kicker"><span lang="zh">隐私</span><span lang="en">Privacy</span></div>
-            <h3 style="margin-top:10px"><span lang="zh">数据怎么处理</span><span lang="en">What happens to your data</span></h3>
-            <ul class="privacy-list">
-              <li><span lang="zh">API Key 保存在本机浏览器，不同步到你的 Google 账号。</span><span lang="en">Your API key is kept in this browser and never synced to your Google account.</span></li>
-              <li><span lang="zh">只有后台脚本读取 Key，网页拿不到它。</span><span lang="en">Only the background worker reads the key — web pages can't.</span></li>
-              <li><span lang="zh">你翻译的文字只发给你选的服务商，不经过任何第三方。</span><span lang="en">Text you translate goes only to your chosen provider, never through a third party.</span></li>
-              <li><span lang="zh">设置页里一键删除所有已保存的数据。</span><span lang="en">Delete everything the extension stored with one click in settings.</span></li>
-            </ul>
-          </div>
+        <div class="pgrid">
+          <article class="card reveal"><h3><span lang="zh">Key 留在本机</span><span lang="en">Your key stays on this device</span></h3><p><span lang="zh">API Key 保存在本机浏览器，不同步到你的 Google 账号。</span><span lang="en">Your API key is kept in this browser and never synced to your Google account.</span></p></article>
+          <article class="card reveal"><h3><span lang="zh">网页拿不到 Key</span><span lang="en">Web pages never see it</span></h3><p><span lang="zh">只有扩展的后台脚本会读取 Key，你访问的网页无法读取。</span><span lang="en">Only the extension's background worker reads the key — the pages you visit cannot.</span></p></article>
+          <article class="card reveal"><h3><span lang="zh">直接发给你的服务商</span><span lang="en">Straight to your provider</span></h3><p><span lang="zh">你选中的文字只发给你选的服务商，不经过任何第三方。</span><span lang="en">The text you select goes only to your chosen provider, never through a third party.</span></p></article>
+          <article class="card reveal"><h3><span lang="zh">随时一键清除</span><span lang="en">Delete everything, anytime</span></h3><p><span lang="zh">在设置页点一下，就能删除扩展保存的所有 Key 和设置。</span><span lang="en">One click in settings removes every key and setting the extension stored.</span></p></article>
         </div>
       </section>
 
@@ -336,7 +306,7 @@
         <svg viewBox="0 0 128 128" aria-hidden="true"><rect x="8" y="8" width="112" height="112" rx="30" fill="#252839"/><path d="M41 35v53h43" fill="none" stroke="#5ACCED" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 29c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21-15 0-21-6-21-21Z" fill="#5ACCED"/></svg>
         <h2><span lang="zh">让每一句话，都刚刚好。</span><span lang="en">Make every sentence land just right.</span></h2>
         <p><span lang="zh">装上 Luna Translate，在你读和写的每个角落，都有一位随叫随到的译者和编辑。</span><span lang="en">Add Luna Translate and keep a translator and editor one click away, wherever you read and write.</span></p>
-        <div class="cta"><a class="btn primary" href="#install"><span lang="zh">安装扩展</span><span lang="en">Install the extension</span></a></div>
+        <div class="cta"><a class="btn primary store-link" href="#"><span lang="zh">添加到 Chrome</span><span lang="en">Add to Chrome</span></a></div>
       </section>
     </main>
 
@@ -347,8 +317,15 @@
   </div>
 
   <script>
+    // Paste the Chrome Web Store listing URL here once the extension is published.
+    var STORE_URL = '';
+
     (function () {
       var root = document.documentElement;
+      document.querySelectorAll('.store-link').forEach(function (a) {
+        if (STORE_URL) { a.href = STORE_URL; a.rel = 'noopener'; }
+        else a.addEventListener('click', function (e) { e.preventDefault(); });
+      });
       var saved = null;
       try { saved = localStorage.getItem('luna-lang'); } catch (e) {}
       var lang = saved || (/^zh/i.test(navigator.language || '') ? 'zh' : 'en');
