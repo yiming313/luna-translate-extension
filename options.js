@@ -103,8 +103,6 @@ async function clearAll() {
 async function save() {
   stashCurrent();
   settings.provider = provider;
-  settings.primaryLanguage = $('primaryLanguage').value;
-  settings.secondaryLanguage = $('secondaryLanguage').value;
   settings.targetLanguage = $('targetLanguage').value;
   settings.polishLanguage = $('polishLanguage').value;
   settings.translatePrompt = $('translatePrompt').value;
@@ -145,16 +143,10 @@ async function test() {
     button.addEventListener('click', () => { stashCurrent(); showProvider(id); });
     box.append(button);
   }
-  for (const [value, label] of LANGUAGES) {
-    $('primaryLanguage').append(new Option(label, value));
-    $('secondaryLanguage').append(new Option(label, value));
-  }
   $('targetLanguage').append(new Option(t('optTargetAuto'), 'auto'));
   for (const [value, label] of LANGUAGES) $('targetLanguage').append(new Option(label, value));
   $('polishLanguage').append(new Option(t('optPolishSame'), 'same'));
   for (const [value, label] of LANGUAGES) $('polishLanguage').append(new Option(label, value));
-  $('primaryLanguage').value = settings.primaryLanguage;
-  $('secondaryLanguage').value = settings.secondaryLanguage;
   $('targetLanguage').value = settings.targetLanguage;
   $('polishLanguage').value = settings.polishLanguage;
   $('translatePrompt').value = settings.translatePrompt;
@@ -162,7 +154,7 @@ async function test() {
   showProvider(PROVIDERS[settings.provider] ? settings.provider : 'openrouter');
   $('save').addEventListener('click', () => save());
   // Language dropdowns and prompts save on change, so a forgotten Save click cannot lose them.
-  for (const id of ['primaryLanguage', 'secondaryLanguage', 'targetLanguage', 'polishLanguage', 'translatePrompt', 'polishPrompt']) {
+  for (const id of ['targetLanguage', 'polishLanguage', 'translatePrompt', 'polishPrompt']) {
     $(id).addEventListener('change', () => save());
   }
   $('test').addEventListener('click', test);

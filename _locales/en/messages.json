@@ -143,20 +143,11 @@
   "optSectionLang": {
     "message": "Translate & polish"
   },
-  "optPrimary": {
-    "message": "My main language"
-  },
-  "optPrimaryHelp": {
-    "message": "Default translation target. Text already in this language is translated into your second language."
-  },
-  "optSecondary": {
-    "message": "My second language"
-  },
   "optTarget": {
     "message": "Translation target"
   },
   "optTargetAuto": {
-    "message": "Automatic (main ↔ second language)"
+    "message": "Automatic (browser language ↔ English)"
   },
   "optPolishLang": {
     "message": "Polish output language"

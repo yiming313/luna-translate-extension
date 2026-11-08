@@ -75,7 +75,7 @@ assert.match(pol, /same language as the original/);
 assert.doesNotMatch(pol, /Target language/);
 assert.match(buildRequest('polish', 'x', { polishLanguage: 'Deutsch' }).system, /in Deutsch\.$/);
 assert.ok(buildRequest('translate', 'x', { translatePrompt: 'custom' }).system.startsWith('custom'));
-assert.match(buildRequest('translate', 'x', { targetLanguage: 'auto', primaryLanguage: 'English', secondaryLanguage: '日本語' }).system, /Target language: English\. If the text is already in English, translate it into 日本語/);
+assert.match(buildRequest('translate', 'x', { targetLanguage: 'auto', primaryLanguage: 'English' }).system, /Target language: English\. If the text is already in English, translate it into Español/);
 assert.match(buildRequest('translate', 'x', { primaryLanguage: 'English' }).system, /into Español instead/);
 
 // Locales: every locale has the same keys and every used key exists

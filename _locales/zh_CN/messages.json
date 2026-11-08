@@ -143,20 +143,11 @@
   "optSectionLang": {
     "message": "翻译与润色"
   },
-  "optPrimary": {
-    "message": "我的主要语言"
-  },
-  "optPrimaryHelp": {
-    "message": "默认翻译目标。文本已经是这种语言时，会改译成你的第二语言。"
-  },
-  "optSecondary": {
-    "message": "我的第二语言"
-  },
   "optTarget": {
     "message": "翻译目标语言"
   },
   "optTargetAuto": {
-    "message": "自动（主要语言 ↔ 第二语言）"
+    "message": "自动（浏览器语言 ↔ 英文）"
   },
   "optPolishLang": {
     "message": "润色输出语言"

@@ -143,20 +143,11 @@
   "optSectionLang": {
     "message": "翻譯與潤飾"
   },
-  "optPrimary": {
-    "message": "我的主要語言"
-  },
-  "optPrimaryHelp": {
-    "message": "預設翻譯目標。文字已是此語言時，會改譯成你的第二語言。"
-  },
-  "optSecondary": {
-    "message": "我的第二語言"
-  },
   "optTarget": {
     "message": "翻譯目標語言"
   },
   "optTargetAuto": {
-    "message": "自動（主要語言 ↔ 第二語言）"
+    "message": "自動（瀏覽器語言 ↔ 英文）"
   },
   "optPolishLang": {
     "message": "潤飾輸出語言"

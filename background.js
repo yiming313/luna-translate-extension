@@ -1,7 +1,7 @@
 import { callAI } from './lib/providers.js';
 import { buildRequest, MODES } from './lib/prompts.js';
 import { loadSettings, activeConfig } from './lib/storage.js';
-import { t } from './lib/i18n.js';
+import { t, detectLanguage } from './lib/i18n.js';
 
 const MAX_INPUT_CHARS = 8000;
 
@@ -14,7 +14,7 @@ async function runAI(mode, text) {
     const settings = await loadSettings();
     const config = activeConfig(settings);
     if (!config.apiKey) throw new Error(t('errNoKey'));
-    const { system, user } = buildRequest(mode, trimmed, settings);
+    const { system, user } = buildRequest(mode, trimmed, { ...settings, primaryLanguage: detectLanguage() });
     const result = await callAI(config, system, user);
     return { ok: true, result };
   } catch (error) {
