@@ -3,6 +3,8 @@
 Translate and polish selected text in any web page, using your own AI account.
 Bring one of: **OpenRouter**, **OpenAI**, **Anthropic** or **Google Gemini** API keys.
 
+Landing page: [`docs/index.html`](docs/index.html) (self-contained, no build step; open it in a browser).
+
 ## Install (developer mode)
 
 1. Open `chrome://extensions` and turn on **Developer mode**.

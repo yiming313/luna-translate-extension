@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0a0d18" />
+  <title>Luna Translate — 随选随译，一键润色</title>
+  <meta name="description" content="Luna Translate 是一个 Chrome 扩展：选中文字即可翻译和润色，使用你自己的 OpenRouter、OpenAI、Anthropic 或 Gemini Key。" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      --bg: #0a0d18; --bg-2: #0e1222; --panel: #12172a; --panel-2: #181e36; --line: #232a47; --line-2: #2f3860;
+      --ink: #eef1fb; --muted: #98a2c3; --faint: #646e92; --accent: #5acced; --accent-soft: rgba(90, 204, 237, .12);
+      --lav: #c7b9ff; --radius: 18px;
+      --font: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--bg); font: 16px/1.65 var(--font); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img, svg { display: block; max-width: 100%; }
+    ::selection { color: #06141a; background: var(--accent); }
+
+    /* language switch: every translatable node is a <span lang="zh|en"> pair */
+    html[data-lang="zh"] [lang="en"], html[data-lang="en"] [lang="zh"] { display: none !important; }
+
+    .wrap { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+
+    /* ---------- background: a quiet moon ---------- */
+    .sky { position: absolute; inset: 0 0 auto 0; height: 980px; overflow: hidden; pointer-events: none; z-index: 0;
+      -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+    .moon { position: absolute; top: -260px; right: -140px; width: 720px; height: 720px; border-radius: 50%;
+      background: radial-gradient(circle at 32% 30%, rgba(90, 204, 237, .22), rgba(90, 204, 237, .06) 38%, transparent 66%); }
+    .moon::after { content: ""; position: absolute; inset: 120px; border-radius: 50%; border: 1px solid rgba(90, 204, 237, .16); }
+    .moon::before { content: ""; position: absolute; inset: 40px; border-radius: 50%; border: 1px solid rgba(199, 185, 255, .08); }
+    .glow-l { position: absolute; top: 260px; left: -260px; width: 560px; height: 560px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(199, 185, 255, .09), transparent 65%); }
+    .stars { position: absolute; inset: 0; opacity: .7;
+      background-image:
+        radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 27% 61%, #bfd 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 41% 12%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 58% 44%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 73% 22%, #cdf 50%, transparent 51%), radial-gradient(1.5px 1.5px at 86% 58%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 93% 14%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 6% 72%, #fff 50%, transparent 51%),
+        radial-gradient(1px 1px at 34% 86%, #cdf 50%, transparent 51%), radial-gradient(1px 1px at 66% 78%, #fff 50%, transparent 51%);
+      animation: twinkle 7s ease-in-out infinite alternate; }
+    @keyframes twinkle { from { opacity: .35; } to { opacity: .8; } }
+
+    /* ---------- nav ---------- */
+    header.nav { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 650; letter-spacing: -.01em; }
+    .brand svg { width: 30px; height: 30px; }
+    .nav-right { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: 14px; }
+    .nav-right a:hover { color: var(--ink); }
+    .lang { display: inline-flex; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: rgba(18, 23, 42, .6); }
+    .lang button { padding: 3px 11px; color: var(--muted); background: none; border: 0; border-radius: 999px; font: inherit; font-size: 12px; cursor: pointer; }
+    html[data-lang="zh"] .lang [data-set="zh"], html[data-lang="en"] .lang [data-set="en"] { color: #06141a; background: var(--accent); font-weight: 650; }
+    .lang button:focus-visible, .btn:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .hide-sm { display: inline; }
+
+    /* ---------- hero ---------- */
+    .hero { position: relative; z-index: 2; padding: 76px 0 40px; display: grid; grid-template-columns: 1.02fr .98fr; gap: 56px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 5px 13px 5px 9px; color: var(--accent); border: 1px solid rgba(90, 204, 237, .28); border-radius: 999px; background: var(--accent-soft); font-size: 12.5px; letter-spacing: .02em; }
+    .eyebrow i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+    h1 { margin: 22px 0 18px; font-size: clamp(38px, 5.4vw, 64px); line-height: 1.07; letter-spacing: -.035em; font-weight: 700; }
+    h1 em { font-style: normal; background: linear-gradient(100deg, var(--accent), var(--lav)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { max-width: 33em; margin: 0 0 30px; color: var(--muted); font-size: 18px; line-height: 1.7; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 9px; padding: 13px 22px; border-radius: 12px; border: 1px solid var(--line-2); color: var(--ink); background: var(--panel); font-weight: 600; font-size: 15px; transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+    .btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+    .btn.primary { color: #06141a; border-color: transparent; background: linear-gradient(135deg, #7fdcf5, var(--accent)); box-shadow: 0 10px 34px -10px rgba(90, 204, 237, .6); }
+    .btn.primary:hover { border-color: transparent; box-shadow: 0 14px 40px -10px rgba(90, 204, 237, .8); }
+    .note { margin-top: 18px; color: var(--faint); font-size: 13px; }
+
+    /* hero mock: a page with a selection and the result card */
+    .stage { position: relative; }
+    .browser { border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(180deg, var(--panel), var(--bg-2)); box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255,255,255,.02) inset; overflow: hidden; }
+    .browser-bar { display: flex; align-items: center; gap: 7px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+    .browser-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); }
+    .browser-bar span { margin-left: 10px; flex: 1; max-width: 240px; padding: 3px 12px; color: var(--faint); border-radius: 999px; background: rgba(255,255,255,.04); font-size: 11.5px; font-family: var(--mono); }
+    .page { padding: 26px 26px 262px; color: #aab3d2; font-size: 14.5px; line-height: 1.8; }
+    .page .line { height: 9px; margin-bottom: 11px; border-radius: 6px; background: rgba(255,255,255,.06); }
+    .page p { margin: 0 0 14px; }
+    .page mark { padding: 2px 3px; color: var(--ink); background: rgba(90, 204, 237, .28); border-radius: 4px; box-shadow: 0 0 0 1px rgba(90, 204, 237, .45); }
+    .menu { position: absolute; left: 30px; top: 168px; min-width: 170px; padding: 6px; border: 1px solid var(--line-2); border-radius: 11px; background: #161c33; box-shadow: 0 18px 40px -12px rgba(0,0,0,.7); font-size: 12.5px; }
+    .menu div { padding: 6px 11px; border-radius: 7px; color: var(--muted); }
+    .menu div.on { color: var(--ink); background: rgba(90, 204, 237, .14); }
+    .result { position: absolute; right: -18px; bottom: -30px; width: min(330px, 86%); padding: 14px 14px 6px; border: 1px solid var(--line-2); border-radius: 15px; background: rgba(21, 27, 50, .96); backdrop-filter: blur(10px); box-shadow: 0 30px 70px -20px rgba(0,0,0,.8), 0 0 60px -24px rgba(90, 204, 237, .5); }
+    .result header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--muted); }
+    .result header svg { width: 16px; height: 16px; }
+    .tone { margin-bottom: 8px; padding: 9px 11px; border-radius: 10px; background: rgba(255,255,255,.04); }
+    .tone b { display: block; margin-bottom: 2px; color: var(--accent); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; }
+    .tone span { display: block; color: #d4daf0; font-size: 12.5px; line-height: 1.55; }
+    .tone:nth-child(3) b { color: var(--lav); }
+    .tone:nth-child(4) b { color: #8ee6c0; }
+
+    /* ---------- sections ---------- */
+    section { position: relative; z-index: 2; }
+    .sec { padding: 110px 0 0; }
+    .kicker { color: var(--accent); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+    h2 { margin: 12px 0 14px; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.15; letter-spacing: -.03em; font-weight: 700; }
+    .sub { max-width: 38em; margin: 0; color: var(--muted); font-size: 17px; }
+
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin-top: 46px; }
+    .card { position: relative; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(180deg, var(--panel), var(--bg-2)); overflow: hidden; transition: border-color .25s ease, transform .25s ease; }
+    .card:hover { border-color: var(--line-2); transform: translateY(-2px); }
+    .card h3 { margin: 18px 0 8px; font-size: 19px; letter-spacing: -.015em; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .span-7 { grid-column: span 7; } .span-5 { grid-column: span 5; } .span-4 { grid-column: span 4; } .span-6 { grid-column: span 6; }
+    .ico { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; color: var(--accent); background: var(--accent-soft); border: 1px solid rgba(90, 204, 237, .22); }
+    .ico svg { width: 21px; height: 21px; }
+    .ico.lav { color: var(--lav); background: rgba(199, 185, 255, .1); border-color: rgba(199, 185, 255, .24); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .chip { padding: 6px 13px; color: var(--ink); border: 1px solid var(--line-2); border-radius: 999px; background: rgba(255,255,255,.03); font-size: 13px; }
+    .tones { display: grid; gap: 8px; margin-top: 20px; }
+    .tones div { display: flex; gap: 10px; align-items: baseline; padding: 9px 13px; border-radius: 10px; background: rgba(255,255,255,.04); font-size: 13.5px; color: #cdd4ee; }
+    .tones b { flex: none; min-width: 60px; color: var(--accent); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .tones div:nth-child(2) b { color: var(--lav); } .tones div:nth-child(3) b { color: #8ee6c0; }
+    .lock { display: flex; align-items: center; gap: 10px; margin-top: 20px; padding: 11px 14px; color: #bfc8e6; border: 1px dashed var(--line-2); border-radius: 12px; font-family: var(--mono); font-size: 12.5px; }
+    .lock i { width: 7px; height: 7px; border-radius: 50%; background: #8ee6c0; box-shadow: 0 0 10px #8ee6c0; flex: none; }
+
+    /* steps */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 46px; counter-reset: s; }
+    .step { position: relative; padding: 28px 26px 26px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-2); }
+    .step::before { counter-increment: s; content: "0" counter(s); display: block; margin-bottom: 14px; font-family: var(--mono); font-size: 13px; color: var(--accent); }
+    .step h3 { margin: 0 0 8px; font-size: 18px; }
+    .step p { margin: 0; color: var(--muted); font-size: 15px; }
+    .step code, .install code { padding: 1px 7px; border-radius: 6px; background: rgba(255,255,255,.07); font-family: var(--mono); font-size: .88em; color: #d9def2; }
+
+    /* shortcuts */
+    .keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 46px; }
+    .key { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-2); }
+    .key span { color: var(--muted); font-size: 15px; }
+    kbd { display: inline-flex; gap: 5px; font-family: var(--mono); }
+    kbd i { font-style: normal; min-width: 30px; padding: 4px 9px; text-align: center; color: var(--ink); border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 8px; background: var(--panel-2); font-size: 13px; }
+
+    /* install */
+    .install { margin-top: 46px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .install ol { margin: 0; padding: 0; list-style: none; counter-reset: i; }
+    .install li { position: relative; padding: 0 0 18px 44px; color: var(--muted); font-size: 15.5px; counter-increment: i; }
+    .install li::before { content: counter(i); position: absolute; left: 0; top: -1px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: var(--accent); border: 1px solid rgba(90,204,237,.35); background: var(--accent-soft); font-size: 13px; font-weight: 600; }
+    .install li strong { color: var(--ink); font-weight: 600; }
+    .install .card { padding: 32px; }
+    .privacy-list { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+    .privacy-list li { position: relative; padding-left: 26px; color: var(--muted); font-size: 15px; }
+    .privacy-list li::before { content: ""; position: absolute; left: 4px; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px rgba(90,204,237,.7); }
+
+    /* closing */
+    .closing { margin: 120px 0 0; padding: 70px 24px; text-align: center; border: 1px solid var(--line); border-radius: 28px; overflow: hidden; position: relative;
+      background: radial-gradient(ellipse at 50% 120%, rgba(90, 204, 237, .22), transparent 60%), linear-gradient(180deg, var(--panel), var(--bg-2)); }
+    .closing svg { width: 64px; height: 64px; margin: 0 auto 22px; }
+    .closing h2 { margin: 0 0 12px; }
+    .closing p { margin: 0 auto 28px; max-width: 30em; color: var(--muted); }
+    .closing .cta { justify-content: center; }
+    footer { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; padding: 42px 0 56px; color: var(--faint); font-size: 13px; }
+
+    /* reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .stars { animation: none; } html { scroll-behavior: auto; } }
+
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; gap: 64px; padding-top: 48px; }
+      .result { right: 8px; }
+      .span-7, .span-5, .span-4, .span-6 { grid-column: span 12; }
+      .steps, .keys, .install { grid-template-columns: 1fr; }
+      .hide-sm { display: none; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 32px); }
+      .sec { padding-top: 84px; }
+      .lead { font-size: 16.5px; }
+      .page { padding-bottom: 290px; }
+      .menu { left: 14px; top: 190px; }
+      .result { right: 0; width: 92%; }
+      .card { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"><div class="stars"></div><div class="moon"></div><div class="glow-l"></div></div>
+
+  <div class="wrap">
+    <header class="nav">
+      <a class="brand" href="#top" aria-label="Luna Translate">
+        <svg viewBox="0 0 128 128" aria-hidden="true"><rect x="8" y="8" width="112" height="112" rx="30" fill="#252839"/><path d="M41 35v53h43" fill="none" stroke="#5ACCED" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 29c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21-15 0-21-6-21-21Z" fill="#5ACCED"/></svg>
+        Luna Translate
+      </a>
+      <div class="nav-right">
+        <a class="hide-sm" href="#features"><span lang="zh">功能</span><span lang="en">Features</span></a>
+        <a class="hide-sm" href="#how"><span lang="zh">使用方法</span><span lang="en">How it works</span></a>
+        <a class="hide-sm" href="#install"><span lang="zh">安装</span><span lang="en">Install</span></a>
+        <div class="lang" role="group" aria-label="Language"><button type="button" data-set="zh">中文</button><button type="button" data-set="en">EN</button></div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- hero -->
+      <section class="hero">
+        <div>
+          <span class="eyebrow"><i></i><span lang="zh">Chrome 扩展 · 自带 AI Key</span><span lang="en">Chrome extension · Bring your own AI key</span></span>
+          <h1><span lang="zh">选中文字，<br /><em>随选随译，<br />一键润色。</em></span><span lang="en">Select any text.<br /><em>Translate. Polish. Done.</em></span></h1>
+          <p class="lead">
+            <span lang="zh">在任何网页上选中文字，右键或按下快捷键，立刻得到自然的译文，或三种语气的润色版本。用你已有的 OpenRouter、OpenAI、Anthropic 或 Gemini Key，不需要新的订阅。</span>
+            <span lang="en">Select text on any page, then right-click or press a shortcut to get a natural translation, or polished rewrites in three tones. Use the OpenRouter, OpenAI, Anthropic or Gemini key you already have — no new subscription.</span>
+          </p>
+          <div class="cta">
+            <a class="btn primary" href="#install">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+              <span lang="zh">安装扩展</span><span lang="en">Install the extension</span>
+            </a>
+            <a class="btn" href="#how"><span lang="zh">看看怎么用</span><span lang="en">See how it works</span></a>
+          </div>
+          <p class="note"><span lang="zh">免费 · 无账号 · 无服务器 · 无统计</span><span lang="en">Free · No account · No server · No analytics</span></p>
+        </div>
+
+        <div class="stage" aria-hidden="true">
+          <div class="browser">
+            <div class="browser-bar"><i></i><i></i><i></i><span>example.com/notes</span></div>
+            <div class="page">
+              <div class="line" style="width:62%"></div>
+              <div class="line" style="width:88%"></div>
+              <p>Quarterly notes — <mark>I want to say that the plan is not good and we should change it.</mark></p>
+              <div class="line" style="width:74%"></div>
+              <div class="line" style="width:46%"></div>
+            </div>
+          </div>
+          <div class="menu"><div class="on">Luna: <span lang="zh">润色</span><span lang="en">Polish</span> “I want to say…”</div><div>Luna: <span lang="zh">翻译</span><span lang="en">Translate</span></div></div>
+          <div class="result">
+            <header><svg viewBox="0 0 128 128"><rect x="8" y="8" width="112" height="112" rx="30" fill="#252839"/><path d="M41 35v53h43" fill="none" stroke="#5ACCED" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 29c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21-15 0-21-6-21-21Z" fill="#5ACCED"/></svg>Luna · <span lang="zh">润色</span><span lang="en">Polish</span></header>
+            <div class="tone"><b>Warm</b><span>I'm a little worried the plan isn't quite working. Could we take another look together?</span></div>
+            <div class="tone"><b>Neutral</b><span>I don't think the plan is effective, and I suggest we revise it.</span></div>
+            <div class="tone"><b>Cool</b><span>Honestly, this plan's not it. Let's switch things up.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- features -->
+      <section class="sec" id="features">
+        <div class="reveal">
+          <div class="kicker"><span lang="zh">功能</span><span lang="en">Features</span></div>
+          <h2><span lang="zh">少一步，多一点从容。</span><span lang="en">One step less between you and the words.</span></h2>
+          <p class="sub"><span lang="zh">不用切换标签页，不用复制粘贴。结果就出现在你正在读、正在写的地方。</span><span lang="en">No tab switching, no copy and paste. The answer appears right where you are reading or writing.</span></p>
+        </div>
+        <div class="grid">
+          <article class="card span-7 reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h9M8.5 3v2M6 5c.5 3.5 3 6.5 6.5 8M12 5c-.6 3.6-3.4 6.9-7.5 8.5"/><path d="M12.5 20l4-9 4 9M14 17h5"/></svg></div>
+            <h3><span lang="zh">任何语言，随选随译</span><span lang="en">Translate any language on the spot</span></h3>
+            <p><span lang="zh">自动识别原文语言，给出三种语气（温暖、中性、冷静）的译文。文本已经是你的浏览器语言时，自动译成英文；也可以固定一个目标语言。</span><span lang="en">The source language is detected automatically and you get three tones: warm, neutral and cool. Text already in your browser language is translated into English, or pin a fixed target language.</span></p>
+            <div class="chips"><span class="chip">简体中文</span><span class="chip">English</span><span class="chip">日本語</span><span class="chip">한국어</span><span class="chip">Français</span><span class="chip">Deutsch</span><span class="chip">Español</span><span class="chip">+ 10</span></div>
+          </article>
+          <article class="card span-5 reveal">
+            <div class="ico lav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c0 4.5-2 6.5-6.5 6.5C10 9.5 12 11.5 12 16c0-4.5 2-6.5 6.5-6.5C14 9.5 12 7.5 12 3Z"/><path d="M18 15.5c0 2-1 3-3 3 2 0 3 1 3 3 0-2 1-3 3-3-2 0-3-1-3-3Z"/></svg></div>
+            <h3><span lang="zh">润色，保持你的语言</span><span lang="en">Polish, in your own language</span></h3>
+            <p><span lang="zh">修正语法和措辞，让表达更自然，同一段话给出三个版本供你挑选。</span><span lang="en">Fix grammar and word choice, and pick from three rewrites of the same passage.</span></p>
+            <div class="tones"><div><b>Warm</b><span><span lang="zh">亲切，带一点温度</span><span lang="en">friendly, with warmth</span></span></div><div><b>Neutral</b><span><span lang="zh">理性，清晰克制</span><span lang="en">clear and measured</span></span></div><div><b>Cool</b><span><span lang="zh">随性，干脆利落</span><span lang="en">relaxed and direct</span></span></div></div>
+          </article>
+          <article class="card span-4 reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l3 3M14 9l2 2"/></svg></div>
+            <h3><span lang="zh">用你自己的 AI</span><span lang="en">Bring your own AI</span></h3>
+            <p><span lang="zh">四家服务商任选，模型自己挑，还能一键刷新到最新的模型列表。</span><span lang="en">Pick any of four providers and any model, then refresh to the latest model list in one click.</span></p>
+            <div class="chips"><span class="chip">OpenRouter</span><span class="chip">OpenAI</span><span class="chip">Anthropic</span><span class="chip">Gemini</span></div>
+          </article>
+          <article class="card span-4 reveal">
+            <div class="ico lav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="12" rx="2.5"/><path d="M8 20h8M12 16v4M8 9h8M8 12h5"/></svg></div>
+            <h3><span lang="zh">直接替换原文</span><span lang="en">Replace in place</span></h3>
+            <p><span lang="zh">在输入框里写作时，选中文字润色，点一下“替换原文”，不用来回复制。</span><span lang="en">Writing in a text box? Select, polish, and click “Replace original” — no copying back and forth.</span></p>
+          </article>
+          <article class="card span-4 reveal">
+            <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 3.8 5.2 3.8 8.5s-1.2 6.1-3.8 8.5c-2.6-2.4-3.8-5.2-3.8-8.5S9.4 5.9 12 3.5Z"/></svg></div>
+            <h3><span lang="zh">界面跟随浏览器</span><span lang="en">Speaks your browser's language</span></h3>
+            <p><span lang="zh">内置 English、简体中文、繁體中文界面，自动匹配 Chrome 的语言。</span><span lang="en">English, 简体中文 and 繁體中文 are built in and follow Chrome's language automatically.</span></p>
+          </article>
+          <article class="card span-12 reveal" style="grid-column: span 12">
+            <div style="display:grid; grid-template-columns: auto 1fr; gap: 22px; align-items:center">
+              <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg></div>
+              <div>
+                <h3 style="margin:0 0 6px"><span lang="zh">你的 Key 和文字，只属于你</span><span lang="en">Your key and your text stay yours</span></h3>
+                <p><span lang="zh">Key 只保存在本机浏览器，不同步、不上传，只发给你选的服务商。没有 Luna 服务器，没有统计，也不收集任何数据。</span><span lang="en">Your key is stored only in this browser — never synced, never uploaded, sent only to the provider you choose. No Luna server, no analytics, no data collection.</span></p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- how -->
+      <section class="sec" id="how">
+        <div class="reveal">
+          <div class="kicker"><span lang="zh">使用方法</span><span lang="en">How it works</span></div>
+          <h2><span lang="zh">三步，开始使用。</span><span lang="en">Three steps to start.</span></h2>
+        </div>
+        <div class="steps">
+          <div class="step reveal"><h3><span lang="zh">填入 API Key</span><span lang="en">Add your API key</span></h3><p><span lang="zh">在设置页选择服务商，粘贴 Key，点“测试连接”确认可用。</span><span lang="en">Choose a provider in settings, paste your key and press “Test connection”.</span></p></div>
+          <div class="step reveal"><h3><span lang="zh">选中文字</span><span lang="en">Select some text</span></h3><p><span lang="zh">在任意网页上选中一句话或一段话。选中输入框里的文字也可以。</span><span lang="en">Highlight a sentence or a paragraph on any page — text inside a text box works too.</span></p></div>
+          <div class="step reveal"><h3><span lang="zh">翻译或润色</span><span lang="en">Translate or polish</span></h3><p><span lang="zh">右键选择 <code>Luna：翻译</code> 或 <code>润色</code>，也可以用下面的快捷键。结果卡片会出现在页面右上角。</span><span lang="en">Right-click and choose <code>Luna: Translate</code> or <code>Polish</code>, or use the shortcuts below. The result card appears at the top right.</span></p></div>
+        </div>
+        <div class="keys">
+          <div class="key reveal"><span><span lang="zh">翻译选中文字</span><span lang="en">Translate selection</span></span><kbd><i>Alt</i><i>T</i></kbd></div>
+          <div class="key reveal"><span><span lang="zh">润色选中文字</span><span lang="en">Polish selection</span></span><kbd><i>Alt</i><i>P</i></kbd></div>
+          <div class="key reveal"><span><span lang="zh">打开弹窗输入</span><span lang="en">Open the popup</span></span><kbd><i>Alt</i><i>L</i></kbd></div>
+        </div>
+      </section>
+
+      <!-- install -->
+      <section class="sec" id="install">
+        <div class="reveal">
+          <div class="kicker"><span lang="zh">安装</span><span lang="en">Install</span></div>
+          <h2><span lang="zh">一分钟装好。</span><span lang="en">Installed in a minute.</span></h2>
+          <p class="sub"><span lang="zh">扩展还没有上架 Chrome 应用商店，目前通过“加载已解压的扩展程序”安装。</span><span lang="en">The extension is not on the Chrome Web Store yet, so install it with “Load unpacked”.</span></p>
+        </div>
+        <div class="install">
+          <div class="card reveal">
+            <ol>
+              <li><span lang="zh"><strong>解压</strong> <code>luna-translate-0.1.0.zip</code>，得到 <code>luna-translate</code> 文件夹。</span><span lang="en"><strong>Unzip</strong> <code>luna-translate-0.1.0.zip</code> to get a <code>luna-translate</code> folder.</span></li>
+              <li><span lang="zh">打开 <code>chrome://extensions</code>，开启右上角的<strong>开发者模式</strong>。</span><span lang="en">Open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> at the top right.</span></li>
+              <li><span lang="zh">点击<strong>加载已解压的扩展程序</strong>，选择 <code>luna-translate</code> 文件夹。</span><span lang="en">Click <strong>Load unpacked</strong> and choose the <code>luna-translate</code> folder.</span></li>
+              <li><span lang="zh">首次安装会打开设置页，<strong>填入 API Key</strong> 即可开始使用。</span><span lang="en">The settings page opens on first install — <strong>add your API key</strong> and you're ready.</span></li>
+            </ol>
+          </div>
+          <div class="card reveal">
+            <div class="kicker"><span lang="zh">隐私</span><span lang="en">Privacy</span></div>
+            <h3 style="margin-top:10px"><span lang="zh">数据怎么处理</span><span lang="en">What happens to your data</span></h3>
+            <ul class="privacy-list">
+              <li><span lang="zh">API Key 保存在本机浏览器，不同步到你的 Google 账号。</span><span lang="en">Your API key is kept in this browser and never synced to your Google account.</span></li>
+              <li><span lang="zh">只有后台脚本读取 Key，网页拿不到它。</span><span lang="en">Only the background worker reads the key — web pages can't.</span></li>
+              <li><span lang="zh">你翻译的文字只发给你选的服务商，不经过任何第三方。</span><span lang="en">Text you translate goes only to your chosen provider, never through a third party.</span></li>
+              <li><span lang="zh">设置页里一键删除所有已保存的数据。</span><span lang="en">Delete everything the extension stored with one click in settings.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing reveal">
+        <svg viewBox="0 0 128 128" aria-hidden="true"><rect x="8" y="8" width="112" height="112" rx="30" fill="#252839"/><path d="M41 35v53h43" fill="none" stroke="#5ACCED" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 29c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21-15 0-21-6-21-21Z" fill="#5ACCED"/></svg>
+        <h2><span lang="zh">让每一句话，都刚刚好。</span><span lang="en">Make every sentence land just right.</span></h2>
+        <p><span lang="zh">装上 Luna Translate，在你读和写的每个角落，都有一位随叫随到的译者和编辑。</span><span lang="en">Add Luna Translate and keep a translator and editor one click away, wherever you read and write.</span></p>
+        <div class="cta"><a class="btn primary" href="#install"><span lang="zh">安装扩展</span><span lang="en">Install the extension</span></a></div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© Luna Translate</span>
+      <span><span lang="zh">所有数据只保存在你的浏览器中</span><span lang="en">All data stays in your browser</span></span>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var saved = null;
+      try { saved = localStorage.getItem('luna-lang'); } catch (e) {}
+      var lang = saved || (/^zh/i.test(navigator.language || '') ? 'zh' : 'en');
+      function apply(next) {
+        root.setAttribute('data-lang', next);
+        root.lang = next === 'zh' ? 'zh-CN' : 'en';
+        document.title = next === 'zh' ? 'Luna Translate — 随选随译，一键润色' : 'Luna Translate — Translate and polish, anywhere';
+        try { localStorage.setItem('luna-lang', next); } catch (e) {}
+      }
+      apply(lang);
+      document.querySelectorAll('.lang button').forEach(function (b) {
+        b.addEventListener('click', function () { apply(b.dataset.set); });
+      });
+      var items = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) { items.forEach(function (n) { n.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      items.forEach(function (n) { io.observe(n); });
+    })();
+  </script>
+</body>
+</html>
