@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><title>shot3</title>
+<link rel="stylesheet" href="/store/scenes/scene.css"><script src="/store/scenes/dark.js"></script><script>window.__css = window.loadDark("/ui.css");</script>
+<style>#mount { position: absolute; inset: 0; background: var(--bg); } #mount main { padding-top: 26px; margin: 0 auto; } #mount h1 { font-size: 22px; } #mount .card { margin-top: 14px; padding: 16px 18px; } body { color: var(--ink); }</style></head><body>
+<div class="bg"></div>
+<div class="cap"><h1><span lang="en">Bring your own AI. <em>Keep your key private.</em></span><span lang="zh">用你自己的 AI，<em>Key 只留在本机。</em></span></h1>
+<p><span lang="en">OpenRouter, OpenAI, Anthropic or Gemini. Your key never leaves your browser.</span><span lang="zh">支持 OpenRouter、OpenAI、Anthropic、Gemini，Key 不会离开你的浏览器。</span></p></div>
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span>chrome-extension://luna-translate/options.html</span></div>
+<div class="stage"><div id="mount" class="options"></div></div></div>
+<script>window.SCENE = { settings: { provider: 'anthropic', apiKeys: { anthropic: 'sk-ant-demo-demo-demo-demo' }, models: { anthropic: 'claude-sonnet-5-5' }, baseUrls: {}, targetLanguage: 'auto', polishLanguage: 'same', translatePrompt: '', polishPrompt: '' }, mode: 'translate', en: { result: '' }, zh: { result: '' } };</script>
+<script src="/store/scenes/stub.js"></script>
+<script type="module">
+ await window.__css;
+ const html = await (await fetch('/options.html')).text();
+ const doc = new DOMParser().parseFromString(html, 'text/html');
+ doc.querySelectorAll('script').forEach((s) => s.remove());
+ document.getElementById('mount').innerHTML = doc.body.innerHTML;
+ await import('/options.js');
+</script></body></html>

@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><title>shot2</title>
+<link rel="stylesheet" href="/store/scenes/scene.css"><script src="/store/scenes/dark.js"></script><script>window.__css = window.loadDark("/ui.css");</script>
+<style>#mount { position: absolute; left: 50%; top: 10px; width: 380px; margin-left: -190px; zoom: .83; background: var(--bg); border: 1px solid #2b3358; border-radius: 16px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.85), 0 0 80px -30px rgba(90,204,237,.5); }
+ #mount.popup { padding: 12px; } #mount textarea { min-height: 76px; } #mount .output { max-height: none; } body { color: var(--ink); }</style></head><body>
+<div class="bg"></div>
+<div class="cap"><h1><span lang="en">Polish your writing. <em>Pick your tone.</em></span><span lang="zh">润色你的文字，<em>挑一个语气。</em></span></h1>
+<p><span lang="en">Fix grammar and word choice in any language, in the same language.</span><span lang="zh">修正语法和措辞，用原文的语言给出三个版本。</span></p></div>
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span>mail.example.com/compose</span></div>
+<div class="stage"><div class="web dim"><div class="top">Inbox</div><article><h2>Re: Q4 planning</h2><div class="meta">Draft</div>
+<p>Hi team, thanks for sending the notes over. I want to say that the plan is not good and we should change it.</p><p>Let me know when you are free this week.</p></article></div>
+<div id="mount" class="popup"></div></div></div>
+<script>window.SCENE = { settings: { provider: 'openrouter', apiKeys: { openrouter: 'demo' } }, mode: 'polish',
+ en: { text: 'i want say that the plan is not good and we should change it', result: "### Casual Tone\n***Warm:***\n>I'd like to share a few concerns about the plan. I think we should consider changing it together.\n\n***Neutral:***\n>I believe the plan is not effective and should be revised.\n\n***Cool:***\n>Honestly, the plan isn't working. We should change it." },
+ zh: { text: '我想说这个计划不太好我们应该改一下', result: "### Casual Tone\n***Warm:***\n>我想说，这个计划可能还有些不够完善，我们一起调整一下会更好。\n\n***Neutral:***\n>我认为这个计划效果不佳，应当进行修改。\n\n***Cool:***\n>说实话，这个计划不太行，咱们改改吧。" } };</script>
+<script src="/store/scenes/stub.js"></script>
+<script src="/lib/render.js"></script>
+<script type="module">
+ await window.__css;
+ const html = await (await fetch('/popup.html')).text();
+ const doc = new DOMParser().parseFromString(html, 'text/html');
+ doc.querySelectorAll('script').forEach((s) => s.remove());
+ document.getElementById('mount').innerHTML = doc.body.innerHTML;
+ await import('/popup.js');
+ await new Promise((r) => setTimeout(r, 300));
+ const S = window.SCENE[document.documentElement.dataset.lang];
+ const input = document.getElementById('input'); input.value = S.text; input.dispatchEvent(new Event('input'));
+ document.getElementById('run').click();
+</script></body></html>

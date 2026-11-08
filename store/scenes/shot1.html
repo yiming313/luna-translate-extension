@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>shot1</title>
+<link rel="stylesheet" href="/store/scenes/scene.css"></head><body>
+<div class="bg"></div>
+<div class="cap"><h1><span lang="en">Select any text. <em>Translate it instantly.</em></span><span lang="zh">选中任何文字，<em>立刻翻译。</em></span></h1>
+<p><span lang="en">Right-click or press Alt+T. Natural translations in three tones.</span><span lang="zh">右键或按 Alt+T，一次得到三种语气的自然译文。</span></p></div>
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span>news.example.jp/column/plan</span></div>
+<div class="stage" id="stage"><div class="web"><div class="top">日刊コラム</div>
+<article><h2>計画を見直す勇気</h2><div class="meta">2026.11.02 · 編集部</div>
+<p>新しいプロジェクトが始まって三か月が経った。チームの雰囲気は悪くないが、数字は思うように伸びていない。</p>
+<p><mark>この計画はうまくいっていないので、変更するべきだと思います。</mark></p>
+<p>それでも、立ち止まって方向を変えることは、決して後退ではない。むしろ、最も早く前に進むための方法なのだ。</p></article></div></div></div>
+<script>window.SCENE = { settings: { provider: 'openrouter', apiKeys: { openrouter: 'demo' } }, mode: 'translate',
+ en: { result: "### Casual Tone\n***Warm:***\n>I'm a little worried this plan isn't working out, so I think we should make some changes together.\n\n***Neutral:***\n>Since this plan isn't working well, I believe we should change it.\n\n***Cool:***\n>This plan's not really working. Let's switch it up." },
+ zh: { result: "### Casual Tone\n***Warm:***\n>我有点担心这个计划进展得不太顺利，我们一起调整一下吧。\n\n***Neutral:***\n>由于这个计划进展不顺，我认为应该做出调整。\n\n***Cool:***\n>这计划不太行，咱们换个方式吧。" } };</script>
+<script src="/store/scenes/stub.js"></script>
+<script src="/lib/render.js"></script>
+<script src="/store/scenes/dark.js"></script>
+<script type="module">
+ await window.runDark("/content.js");
+ const lang = document.documentElement.dataset.lang;
+ const S = window.SCENE[lang];
+ const text = 'この計画はうまくいっていないので、変更するべきだと思います。';
+ window.__onMessage({ type: 'luna-show', mode: 'translate', label: chrome.i18n.getMessage('modeTranslate'), loading: '', text, status: 'done', result: S.result });
+ // content.js appends its host to <html>; move it inside the transformed stage so position:fixed is relative to it
+ document.getElementById('stage').append(document.documentElement.lastElementChild);
+</script></body></html>
