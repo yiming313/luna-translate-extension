@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luna Translate</title>
+  <link rel="stylesheet" href="ui.css" />
+</head>
+<body class="popup">
+  <header class="bar">
+    <strong>Luna Translate</strong>
+    <span class="provider-pill" id="providerPill"></span>
+    <button type="button" class="icon-btn" id="openOptions" title="设置" aria-label="设置">⚙</button>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="模式">
+    <button type="button" role="tab" class="tab is-active" data-mode="translate" aria-selected="true">翻译</button>
+    <button type="button" role="tab" class="tab" data-mode="polish" aria-selected="false">润色</button>
+  </div>
+
+  <textarea id="input" maxlength="8000" placeholder="输入或粘贴文本，Ctrl/⌘ + Enter 运行" aria-label="输入文本"></textarea>
+  <div class="row">
+    <span class="muted" id="counter">0 / 8000</span>
+    <button type="button" class="primary" id="run">翻译</button>
+  </div>
+
+  <div id="notice" class="notice hidden" role="alert"></div>
+  <div id="output" class="output" aria-live="polite"></div>
+
+  <script src="lib/render.js"></script>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

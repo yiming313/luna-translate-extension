@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luna Translate 设置</title>
+  <link rel="stylesheet" href="ui.css" />
+</head>
+<body class="options">
+  <main>
+    <h1>Luna Translate 设置</h1>
+    <p class="muted">选择一个 AI 服务并填入你自己的 API Key。Key 只保存在本机浏览器中，只会发送给你选择的服务商。</p>
+
+    <section class="card">
+      <h2>AI 服务商</h2>
+      <div class="providers" id="providers" role="radiogroup" aria-label="AI 服务商"></div>
+
+      <label class="field">
+        <span>API Key <a id="keyLink" href="#" target="_blank" rel="noopener noreferrer">获取 Key ↗</a></span>
+        <input id="apiKey" type="password" autocomplete="off" spellcheck="false" />
+      </label>
+      <label class="field">
+        <span>模型</span>
+        <input id="model" list="modelList" autocomplete="off" spellcheck="false" />
+        <datalist id="modelList"></datalist>
+      </label>
+      <label class="field">
+        <span>自定义接口地址（可选）</span>
+        <input id="baseUrl" type="url" autocomplete="off" spellcheck="false" placeholder="留空使用官方地址" />
+        <small class="muted">用于代理或兼容接口。保存时浏览器会请求访问该域名的权限。</small>
+      </label>
+      <div class="row">
+        <button type="button" id="test">测试连接</button>
+        <button type="button" class="primary" id="save">保存</button>
+        <span id="status" class="muted" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>翻译与润色</h2>
+      <label class="field">
+        <span>翻译目标语言</span>
+        <select id="targetLanguage"></select>
+      </label>
+      <label class="field">
+        <span>润色输出语言</span>
+        <select id="polishLanguage"></select>
+      </label>
+      <label class="field">
+        <span>翻译提示词（留空使用默认）</span>
+        <textarea id="translatePrompt" rows="5"></textarea>
+      </label>
+      <label class="field">
+        <span>润色提示词（留空使用默认）</span>
+        <textarea id="polishPrompt" rows="8"></textarea>
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>使用方式</h2>
+      <ul class="muted">
+        <li>选中网页文字 → 右键 → “Luna：翻译 / 润色”。</li>
+        <li>快捷键：Alt+T 翻译选中文字，Alt+P 润色，Alt+L 打开弹窗（可在 chrome://extensions/shortcuts 修改）。</li>
+        <li>在输入框中选中文字后润色，可以直接点“替换原文”。</li>
+      </ul>
+    </section>
+  </main>
+  <script type="module" src="options.js"></script>
+</body>
+</html>
