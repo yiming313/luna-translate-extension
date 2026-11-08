@@ -1,26 +1,27 @@
 <!doctype html><html><head><meta charset="utf-8"><title>shot1</title>
-<link rel="stylesheet" href="/store/scenes/scene.css"></head><body>
+<link rel="stylesheet" href="/store/scenes/scene.css"><script src="/store/scenes/dark.js"></script><script>window.__css = window.loadDark("/ui.css");</script>
+<style>#mount { position: absolute; right: 22px; top: 6px; width: 380px; zoom: .83; background: var(--bg); border: 1px solid #2b3358; border-radius: 16px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.85), 0 0 80px -30px rgba(90,204,237,.5); }
+ #mount.popup { padding: 12px; } #mount textarea { min-height: 76px; } #mount .output { max-height: none; } body { color: var(--ink); }
+ .tb { margin-left: auto; width: 22px; height: 22px; } .web article { margin-left: 56px; }</style></head><body>
 <div class="bg"></div>
-<div class="cap"><h1><span lang="en">Select any text. <em>Translate it instantly.</em></span><span lang="zh">选中任何文字，<em>立刻翻译。</em></span></h1>
-<p><span lang="en">Right-click or press Alt+T. Natural translations in three tones.</span><span lang="zh">右键或按 Alt+T，一次得到三种语气的自然译文。</span></p></div>
-<div class="win"><div class="wbar"><i></i><i></i><i></i><span>news.example.jp/column/plan</span></div>
-<div class="stage" id="stage"><div class="web"><div class="top">日刊コラム</div>
-<article><h2>計画を見直す勇気</h2><div class="meta">2026.11.02 · 編集部</div>
-<p>新しいプロジェクトが始まって三か月が経った。チームの雰囲気は悪くないが、数字は思うように伸びていない。</p>
-<p><mark>この計画はうまくいっていないので、変更するべきだと思います。</mark></p>
-<p>それでも、立ち止まって方向を変えることは、決して後退ではない。むしろ、最も早く前に進むための方法なのだ。</p></article></div></div></div>
+<div class="cap"><h1><span lang="en">Open the popup. <em>Translate instantly.</em></span><span lang="zh">点开弹窗，<em>立刻翻译。</em></span></h1><p><span lang="en">Paste any text in any language. Natural translations in three tones.</span><span lang="zh">粘贴任何语言的文字，一次得到三种语气的自然译文。</span></p></div>
+<div class="win"><div class="wbar"><i></i><i></i><i></i><span>news.example.jp/column/plan</span><svg class="tb" viewBox="0 0 128 128"><rect x="8" y="8" width="112" height="112" rx="30" fill="#252839"/><path d="M41 35v53h43" fill="none" stroke="#5ACCED" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M84 29c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21-15 0-21-6-21-21Z" fill="#5ACCED"/></svg></div>
+<div class="stage"><div class="web"><div class="top">日刊コラム</div><article><h2>計画を見直す勇気</h2><div class="meta">2026.11.02 · 編集部</div><p>新しいプロジェクトが始まって三か月が経った。チームの雰囲気は悪くないが、数字は思うように伸びていない。</p><p>この計画はうまくいっていないので、変更するべきだと思います。</p><p>それでも、立ち止まって方向を変えることは、決して後退ではない。</p></article></div>
+<div id="mount" class="popup"></div></div></div>
 <script>window.SCENE = { settings: { provider: 'openrouter', apiKeys: { openrouter: 'demo' } }, mode: 'translate',
- en: { result: "### Casual Tone\n***Warm:***\n>I'm a little worried this plan isn't working out, so I think we should make some changes together.\n\n***Neutral:***\n>Since this plan isn't working well, I believe we should change it.\n\n***Cool:***\n>This plan's not really working. Let's switch it up." },
- zh: { result: "### Casual Tone\n***Warm:***\n>我有点担心这个计划进展得不太顺利，我们一起调整一下吧。\n\n***Neutral:***\n>由于这个计划进展不顺，我认为应该做出调整。\n\n***Cool:***\n>这计划不太行，咱们换个方式吧。" } };</script>
+ en: { text: "この計画はうまくいっていないので、変更するべきだと思います。", result: "### Casual Tone\n***Warm:***\n>I'm a little worried this plan isn't working out, so I think we should make some changes together.\n\n***Neutral:***\n>Since this plan isn't working well, I believe we should change it.\n\n***Cool:***\n>This plan's not really working. Let's switch it up." },
+ zh: { text: "この計画はうまくいっていないので、変更するべきだと思います。", result: "### Casual Tone\n***Warm:***\n>我有点担心这个计划进展得不太顺利，我们一起调整一下吧。\n\n***Neutral:***\n>由于这个计划进展不顺，我认为应该做出调整。\n\n***Cool:***\n>这计划不太行，咱们换个方式吧。" } };</script>
 <script src="/store/scenes/stub.js"></script>
 <script src="/lib/render.js"></script>
-<script src="/store/scenes/dark.js"></script>
 <script type="module">
- await window.runDark("/content.js");
- const lang = document.documentElement.dataset.lang;
- const S = window.SCENE[lang];
- const text = 'この計画はうまくいっていないので、変更するべきだと思います。';
- window.__onMessage({ type: 'luna-show', mode: 'translate', label: chrome.i18n.getMessage('modeTranslate'), loading: '', text, status: 'done', result: S.result });
- // content.js appends its host to <html>; move it inside the transformed stage so position:fixed is relative to it
- document.getElementById('stage').append(document.documentElement.lastElementChild);
+ await window.__css;
+ const html = await (await fetch('/popup.html')).text();
+ const doc = new DOMParser().parseFromString(html, 'text/html');
+ doc.querySelectorAll('script').forEach((s) => s.remove());
+ document.getElementById('mount').innerHTML = doc.body.innerHTML;
+ await import('/popup.js');
+ await new Promise((r) => setTimeout(r, 300));
+ const S = window.SCENE[document.documentElement.dataset.lang];
+ const input = document.getElementById('input'); input.value = S.text; input.dispatchEvent(new Event('input'));
+ document.getElementById('run').click();
 </script></body></html>

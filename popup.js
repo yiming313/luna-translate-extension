@@ -77,13 +77,5 @@ $('openOptions').addEventListener('click', () => chrome.runtime.openOptionsPage(
   }
   const stored = await chrome.storage.local.get('popupMode');
   setMode(MODES[stored.popupMode] ? stored.popupMode : 'translate');
-  // Pre-fill with the page selection when the popup opens (activeTab is granted by the click).
-  try {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (tab?.id && /^https?:/.test(tab.url || '')) {
-      const [{ result }] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => String(window.getSelection() || '') });
-      if (result && result.trim()) { input.value = result.trim().slice(0, 8000); input.dispatchEvent(new Event('input')); }
-    }
-  } catch { /* restricted page */ }
   input.focus();
 })();

@@ -1,6 +1,6 @@
 # Luna Translate (Chrome extension)
 
-Translate and polish selected text in any web page, using your own AI account.
+Translate and polish text from the toolbar popup, using your own AI account.
 Bring one of: **OpenRouter**, **OpenAI**, **Anthropic** or **Google Gemini** API keys.
 
 Landing page: [`docs/index.html`](docs/index.html) (self-contained, no build step; open it in a browser).
@@ -13,10 +13,9 @@ Landing page: [`docs/index.html`](docs/index.html) (self-contained, no build ste
 
 ## Use
 
-- Select text on a page, right-click, then **Luna: translate / polish**.
-- Shortcuts: `Alt+T` translate selection, `Alt+P` polish selection, `Alt+L` open the popup (change at `chrome://extensions/shortcuts`).
-- In text fields, the result card has a **Replace original** button.
-- The toolbar popup lets you paste text directly.
+Click the Luna icon in the toolbar, type or paste your text, choose **Translate** or **Polish**, and press the button (or `Ctrl/⌘ + Enter`).
+
+The extension only works from the popup. It does not read or modify the pages you visit, and its only permission besides the AI endpoints is `storage`.
 
 ## Languages
 
@@ -45,7 +44,7 @@ Pick a model from the dropdown, or choose “Custom…” to type any model ID. 
 ## Privacy
 
 - API keys live in `chrome.storage.local` on this device (not synced) and are only read by the background service worker. Web pages and the content script never see them.
-- Selected text is sent only to the provider you chose. There is no Luna server and no analytics.
+- The text you enter is sent only to the provider you chose. There is no Luna server and no analytics.
 - Anthropic requests include `anthropic-dangerous-direct-browser-access`, which Anthropic requires for browser calls. Keys in an extension are as exposed as the browser profile, so use a key with a spend limit.
 
 ## Develop

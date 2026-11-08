@@ -3,28 +3,13 @@
     "message": "Luna Translate"
   },
   "extDescription": {
-    "message": "Translate and polish selected text with your own AI key: OpenRouter, OpenAI, Anthropic or Google Gemini."
-  },
-  "cmdTranslate": {
-    "message": "Translate selected text"
-  },
-  "cmdPolish": {
-    "message": "Polish selected text"
-  },
-  "cmdPopup": {
-    "message": "Open Luna Translate"
+    "message": "Translate and polish text with your own AI key: OpenRouter, OpenAI, Anthropic or Google Gemini."
   },
   "modeTranslate": {
     "message": "Translate"
   },
   "modePolish": {
     "message": "Polish"
-  },
-  "loadingTranslate": {
-    "message": "Translating…"
-  },
-  "loadingPolish": {
-    "message": "Polishing…"
   },
   "working": {
     "message": "Working…"
@@ -37,18 +22,6 @@
   },
   "copyFailed": {
     "message": "Copy failed"
-  },
-  "replaceOriginal": {
-    "message": "Replace original"
-  },
-  "replaced": {
-    "message": "Replaced"
-  },
-  "replaceFailed": {
-    "message": "Can't replace"
-  },
-  "close": {
-    "message": "Close"
   },
   "errNoText": {
     "message": "Select or enter some text first."
@@ -165,29 +138,13 @@
     "message": "How to use"
   },
   "optUsage1": {
-    "message": "Select text on a page, right-click, then choose “Luna: Translate / Polish”."
+    "message": "Click the Luna icon in the browser toolbar to open the popup (pin it from the puzzle-piece menu for one-click access)."
   },
   "optUsage2": {
-    "message": "Shortcuts: Alt+T translates the selection, Alt+P polishes it, Alt+L opens the popup (change them at chrome://extensions/shortcuts)."
+    "message": "Type or paste your text, pick Translate or Polish, then press the button."
   },
   "optUsage3": {
-    "message": "In text fields, the result card has a “Replace original” button."
-  },
-  "menuTranslate": {
-    "message": "Luna: Translate “$SEL$”",
-    "placeholders": {
-      "sel": {
-        "content": "%s"
-      }
-    }
-  },
-  "menuPolish": {
-    "message": "Luna: Polish “$SEL$”",
-    "placeholders": {
-      "sel": {
-        "content": "%s"
-      }
-    }
+    "message": "Press Ctrl/⌘ + Enter to run without leaving the keyboard."
   },
   "runShortcutTitle": {
     "message": "Shortcut: $KEY$ + Enter",

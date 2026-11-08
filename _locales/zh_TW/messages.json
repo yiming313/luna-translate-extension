@@ -3,28 +3,13 @@
     "message": "Luna Translate"
   },
   "extDescription": {
-    "message": "使用你自己的 AI Key（OpenRouter、OpenAI、Anthropic 或 Google Gemini）翻譯並潤飾選取的文字。"
-  },
-  "cmdTranslate": {
-    "message": "翻譯選取的文字"
-  },
-  "cmdPolish": {
-    "message": "潤飾選取的文字"
-  },
-  "cmdPopup": {
-    "message": "開啟 Luna Translate"
+    "message": "使用你自己的 AI Key（OpenRouter、OpenAI、Anthropic 或 Google Gemini）翻譯並潤飾文字。"
   },
   "modeTranslate": {
     "message": "翻譯"
   },
   "modePolish": {
     "message": "潤飾"
-  },
-  "loadingTranslate": {
-    "message": "正在翻譯…"
-  },
-  "loadingPolish": {
-    "message": "正在潤飾…"
   },
   "working": {
     "message": "處理中…"
@@ -37,18 +22,6 @@
   },
   "copyFailed": {
     "message": "複製失敗"
-  },
-  "replaceOriginal": {
-    "message": "取代原文"
-  },
-  "replaced": {
-    "message": "已取代"
-  },
-  "replaceFailed": {
-    "message": "無法取代"
-  },
-  "close": {
-    "message": "關閉"
   },
   "errNoText": {
     "message": "請先選取或輸入文字。"
@@ -165,29 +138,13 @@
     "message": "使用方式"
   },
   "optUsage1": {
-    "message": "選取網頁文字 → 按右鍵 → 「Luna：翻譯 / 潤飾」。"
+    "message": "點擊瀏覽器工具列上的 Luna 圖示開啟彈出視窗（在拼圖選單中釘選，使用更方便）。"
   },
   "optUsage2": {
-    "message": "快速鍵：Alt+T 翻譯選取文字，Alt+P 潤飾，Alt+L 開啟彈出視窗（可在 chrome://extensions/shortcuts 修改）。"
+    "message": "輸入或貼上文字，選擇「翻譯」或「潤飾」，再按下按鈕。"
   },
   "optUsage3": {
-    "message": "在輸入框中選取文字後，結果卡片會有「取代原文」按鈕。"
-  },
-  "menuTranslate": {
-    "message": "Luna：翻譯「$SEL$」",
-    "placeholders": {
-      "sel": {
-        "content": "%s"
-      }
-    }
-  },
-  "menuPolish": {
-    "message": "Luna：潤飾「$SEL$」",
-    "placeholders": {
-      "sel": {
-        "content": "%s"
-      }
-    }
+    "message": "按 Ctrl/⌘ + Enter 即可不離開鍵盤直接執行。"
   },
   "runShortcutTitle": {
     "message": "快速鍵：$KEY$ + Enter",

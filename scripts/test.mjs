@@ -83,7 +83,7 @@ import fs from 'node:fs';
 const load = (l) => JSON.parse(fs.readFileSync(new URL(`../_locales/${l}/messages.json`, import.meta.url)));
 const en = load('en');
 for (const l of ['zh_CN', 'zh_TW']) assert.deepEqual(Object.keys(load(l)).sort(), Object.keys(en).sort(), l);
-const src = ['background.js', 'content.js', 'popup.js', 'options.js', 'popup.html', 'options.html', 'lib/prompts.js']
+const src = ['background.js', 'popup.js', 'options.js', 'popup.html', 'options.html', 'lib/prompts.js']
   .map((f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8')).join('\n');
 const used = new Set([...src.matchAll(/(?:\bt|getMessage)\(\s*'(\w+)'/g)].map((m) => m[1]));
 for (const m of src.matchAll(/(?:data-i18n(?:-placeholder|-label)?|labelKey|loadingKey)[=:]\s*["']?(\w+)/g)) used.add(m[1]);
