@@ -201,5 +201,8 @@
   },
   "optClearConfirm": {
     "message": "刪除此擴充功能儲存的所有 API Key 與設定？此操作無法復原。"
+  },
+  "optPromptTokens": {
+    "message": "可用 {{target}} 表示目標語言、{{other}} 表示第二語言，會自動取代。"
   }
 }

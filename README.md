@@ -25,10 +25,10 @@ The interface follows the browser language: English (default), 简体中文 and 
 
 The prompts are language-agnostic: the model detects the input language itself, so any language pair works.
 
-- **Translate** returns three alternative translations (Warm / Neutral / Cool). With the default "Automatic" target, the target is the browser language; text already in that language is translated into English (Spanish if the browser language is English). Pick a fixed target language in options to override.
-- **Polish** returns three improved versions in the *same language* as the input (or a language you choose).
+- **Translate** is a dictionary-style lookup. For a word or phrase it returns the headword, IPA, part of speech, meaning, definitions, synonyms, antonyms, collocations and examples, written in your *translate target* (default: the browser language; pin another language in options). If the input is already in the target language it gives equivalents in a second language (English, or the browser language when the target was pinned elsewhere). A full sentence or paragraph gets a plain, faithful translation instead of a dictionary entry.
+- **Polish** returns three improved versions (Warm / Neutral / Cool) in the *same language* as the input, or in a language you choose.
 
-Both prompts can be replaced in the options page.
+Custom prompts replace the defaults in the options page. In a custom translate prompt, `{{target}}` and `{{other}}` are replaced with the two languages; a custom prompt without `{{target}}` gets a "Target language: …" line appended.
 
 ## Providers
 

@@ -201,5 +201,8 @@
   },
   "optClearConfirm": {
     "message": "删除此扩展保存的所有 API Key 和设置？此操作无法撤销。"
+  },
+  "optPromptTokens": {
+    "message": "可用 {{target}} 表示目标语言、{{other}} 表示第二语言，会自动替换。"
   }
 }

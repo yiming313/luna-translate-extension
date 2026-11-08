@@ -63,20 +63,33 @@ globalThis.fetch = async (u, init) => { seenRedirect = init.redirect; return new
 await assert.rejects(callAI({ provider: 'openai', apiKey: 'sk-SECRET123' }, 's', 'u'), (e) => !e.message.includes('SECRET123') && e.message.includes('***'));
 assert.equal(seenRedirect, 'error');
 
-// Prompts: language-agnostic defaults, language rules appended from settings
-const auto = buildRequest('translate', 'x', { targetLanguage: 'auto', primaryLanguage: '日本語' }).system;
-assert.match(auto, /Target language: 日本語\. If the text is already in 日本語, translate it into English/);
-assert.match(auto, /fluent in every language/);
-assert.doesNotMatch(auto, /English teacher/);
-assert.match(buildRequest('translate', 'x', { targetLanguage: 'Français' }).system, /Target language: Français\.$/);
-assert.match(buildRequest('translate', 'x', { primaryLanguage: '简体中文' }).system, /Target language: 简体中文/);
+// Prompts: dictionary-style translate prompt with {{target}}/{{other}} filled from settings
+import { resolveLanguages } from '../lib/prompts.js';
+assert.deepEqual(resolveLanguages({ primaryLanguage: '简体中文' }), { target: '简体中文', other: 'English' });
+assert.deepEqual(resolveLanguages({ primaryLanguage: '简体中文', targetLanguage: 'English' }), { target: 'English', other: '简体中文' });
+assert.deepEqual(resolveLanguages({ primaryLanguage: '简体中文', targetLanguage: '日本語' }), { target: '日本語', other: '简体中文' });
+assert.deepEqual(resolveLanguages({ primaryLanguage: 'English', targetLanguage: 'auto' }), { target: 'English', other: 'Español' });
+const zh = buildRequest('translate', 'x', { primaryLanguage: '简体中文', targetLanguage: 'auto' }).system;
+assert.match(zh, /dictionary and vocabulary teacher/);
+assert.match(zh, /entry \(field names, headings, explanations, translations\) in 简体中文/);
+assert.match(zh, /equivalent\(s\) in English/);
+assert.ok(!zh.includes('{{'), 'tokens must all be replaced');
+assert.ok(!/Target language:/.test(zh), 'default prompt needs no appended language line');
+assert.match(buildRequest('translate', 'x', { primaryLanguage: '简体中文', targetLanguage: '日本語' }).system, /in 日本語/);
+const plain = buildRequest('translate', 'x', { primaryLanguage: '简体中文', translatePrompt: 'custom' }).system;
+assert.match(plain, /^custom\nTarget language: 简体中文\. If the text is already in 简体中文, translate it into English instead\.$/);
+assert.equal(buildRequest('translate', 'x', { primaryLanguage: 'English', translatePrompt: 'to {{target}} / {{other}}' }).system, 'to English / Español');
 const pol = buildRequest('polish', 'x', {}).system;
 assert.match(pol, /same language as the original/);
 assert.doesNotMatch(pol, /Target language/);
 assert.match(buildRequest('polish', 'x', { polishLanguage: 'Deutsch' }).system, /in Deutsch\.$/);
-assert.ok(buildRequest('translate', 'x', { translatePrompt: 'custom' }).system.startsWith('custom'));
-assert.match(buildRequest('translate', 'x', { targetLanguage: 'auto', primaryLanguage: 'English' }).system, /Target language: English\. If the text is already in English, translate it into Español/);
-assert.match(buildRequest('translate', 'x', { primaryLanguage: 'English' }).system, /into Español instead/);
+
+// Renderer: dictionary markdown splits into headings, plain blocks and labelled blocks
+globalThis.window = {};
+await import('../lib/render.js');
+const blocks = window.LunaRender.parse('### Word\n**Headword:** お疲れ様\n**IPA:** [otsukaresama]\n\n### Definition\n***Japanese:***\n>仕事を終えた人をねぎらう言葉。\n\n***English:***\n>A phrase of appreciation.\n\n### Synonyms\n- ご苦労様');
+assert.deepEqual(blocks.map((b) => (b.heading ? 'h:' : b.label ? 'l:' : 'p:') + (b.label || b.text.split('\n')[0])), ['h:Word', 'p:**Headword:** お疲れ様', 'h:Definition', 'l:Japanese', 'l:English', 'h:Synonyms', 'p:- ご苦労様']);
+assert.equal(window.LunaRender.parse('Just a translation.').length, 1);
 
 // Locales: every locale has the same keys and every used key exists
 import fs from 'node:fs';

@@ -201,5 +201,8 @@
   },
   "optClearConfirm": {
     "message": "Delete all API keys and settings stored by this extension? This cannot be undone."
+  },
+  "optPromptTokens": {
+    "message": "Use {{target}} for the target language and {{other}} for the second language; both are filled in automatically."
   }
 }
