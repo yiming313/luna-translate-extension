@@ -120,6 +120,10 @@ async function test() {
   $('translatePrompt').value = settings.translatePrompt;
   $('polishPrompt').value = settings.polishPrompt;
   showProvider(PROVIDERS[settings.provider] ? settings.provider : 'openrouter');
-  $('save').addEventListener('click', save);
+  $('save').addEventListener('click', () => save());
+  // Language dropdowns and prompts save on change, so a forgotten Save click cannot lose them.
+  for (const id of ['primaryLanguage', 'secondaryLanguage', 'targetLanguage', 'polishLanguage', 'translatePrompt', 'polishPrompt']) {
+    $(id).addEventListener('change', () => save());
+  }
   $('test').addEventListener('click', test);
 })();

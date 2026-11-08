@@ -197,5 +197,13 @@
         "content": "%s"
       }
     }
+  },
+  "runShortcutTitle": {
+    "message": "Shortcut: $KEY$ + Enter",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
   }
 }

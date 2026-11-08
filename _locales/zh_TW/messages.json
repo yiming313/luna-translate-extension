@@ -197,5 +197,13 @@
         "content": "%s"
       }
     }
+  },
+  "runShortcutTitle": {
+    "message": "快速鍵：$KEY$ + Enter",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
   }
 }

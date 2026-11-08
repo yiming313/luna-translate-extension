@@ -8,6 +8,9 @@ const input = $('input');
 const output = $('output');
 const notice = $('notice');
 const runButton = $('run');
+const runLabel = $('runLabel');
+const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+const modKey = isMac ? '⌘' : 'Ctrl';
 let mode = 'translate';
 let busy = false;
 
@@ -18,7 +21,7 @@ function setMode(next) {
     tab.classList.toggle('is-active', active);
     tab.setAttribute('aria-selected', String(active));
   });
-  runButton.textContent = t(MODES[mode].labelKey);
+  runLabel.textContent = t(MODES[mode].labelKey);
   chrome.storage.local.set({ popupMode: mode }).catch(() => {});
 }
 
@@ -33,7 +36,7 @@ async function run() {
   if (!text) { showNotice(t('errNoText')); return; }
   busy = true;
   runButton.disabled = true;
-  runButton.textContent = t('working');
+  runLabel.textContent = t('working');
   showNotice('');
   output.replaceChildren();
   try {
@@ -50,7 +53,7 @@ async function run() {
   } finally {
     busy = false;
     runButton.disabled = false;
-    runButton.textContent = t(MODES[mode].labelKey);
+    runLabel.textContent = t(MODES[mode].labelKey);
   }
 }
 
@@ -64,6 +67,8 @@ $('openOptions').addEventListener('click', () => chrome.runtime.openOptionsPage(
 
 (async function init() {
   applyI18n();
+  $('runKey').textContent = `${modKey}↵`;
+  runButton.title = t('runShortcutTitle', modKey);
   const settings = await loadSettings();
   const spec = PROVIDERS[settings.provider];
   $('providerPill').textContent = spec ? spec.label : '';
